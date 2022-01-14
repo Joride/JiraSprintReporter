@@ -7,6 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C49440D3278477FF000600CA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
+		C49440D527847873000600CA /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D427847873000600CA /* Issue.swift */; };
+		C49440D72784790B000600CA /* BoardsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D62784790B000600CA /* BoardsFetcher.swift */; };
+		C49440D92784794E000600CA /* SprintsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D82784794E000600CA /* SprintsFetcher.swift */; };
+		C49440DB278479B0000600CA /* BurndownFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440DA278479B0000600CA /* BurndownFetcher.swift */; };
+		C49440DD278479CC000600CA /* IssuesDetailsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440DC278479CC000600CA /* IssuesDetailsFetcher.swift */; };
+		C49440E0278479F6000600CA /* SprintAccountant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440DF278479F6000600CA /* SprintAccountant.swift */; };
+		C49440E227847A05000600CA /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440E127847A05000600CA /* Ticket.swift */; };
+		C49440E427847A22000600CA /* SprintAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440E327847A22000600CA /* SprintAccount.swift */; };
+		C49440EC27847D0F000600CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440EB27847D0F000600CA /* AppDelegate.swift */; };
+		C49440EE27847D0F000600CA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440ED27847D0F000600CA /* ViewController.swift */; };
+		C49440F027847D11000600CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C49440EF27847D11000600CA /* Assets.xcassets */; };
+		C49440F327847D11000600CA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C49440F127847D11000600CA /* Main.storyboard */; };
+		C49440F827847D24000600CA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
+		C49440F927847D27000600CA /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D427847873000600CA /* Issue.swift */; };
+		C49440FB27847D43000600CA /* FetchScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440FA27847D43000600CA /* FetchScheduler.swift */; };
+		C49440FD27847D57000600CA /* SprintRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440FC27847D57000600CA /* SprintRetriever.swift */; };
+		C49440FF27847D6D000600CA /* SprintsReviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440FE27847D6D000600CA /* SprintsReviewer.swift */; };
+		C494410127847D85000600CA /* TicketsHistoryFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494410027847D85000600CA /* TicketsHistoryFetcher.swift */; };
+		C494410327847D9E000600CA /* TicketsInActiveSprintFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494410227847D9E000600CA /* TicketsInActiveSprintFetcher.swift */; };
 		C4C5E8EC2784496E00C59F65 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C5E8EB2784496E00C59F65 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,11 +43,38 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C4C5E8E82784496E00C59F65 /* Jira Sprint Reporter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Jira Sprint Reporter"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C49440D2278477FF000600CA /* URLRequest+JIRA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+JIRA.swift"; sourceTree = "<group>"; };
+		C49440D427847873000600CA /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
+		C49440D62784790B000600CA /* BoardsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsFetcher.swift; sourceTree = "<group>"; };
+		C49440D82784794E000600CA /* SprintsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintsFetcher.swift; sourceTree = "<group>"; };
+		C49440DA278479B0000600CA /* BurndownFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurndownFetcher.swift; sourceTree = "<group>"; };
+		C49440DC278479CC000600CA /* IssuesDetailsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesDetailsFetcher.swift; sourceTree = "<group>"; };
+		C49440DF278479F6000600CA /* SprintAccountant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintAccountant.swift; sourceTree = "<group>"; };
+		C49440E127847A05000600CA /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
+		C49440E327847A22000600CA /* SprintAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintAccount.swift; sourceTree = "<group>"; };
+		C49440E927847D0F000600CA /* jsn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jsn.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C49440EB27847D0F000600CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C49440ED27847D0F000600CA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C49440EF27847D11000600CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C49440F227847D11000600CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C49440F427847D11000600CA /* jsn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = jsn.entitlements; sourceTree = "<group>"; };
+		C49440FA27847D43000600CA /* FetchScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchScheduler.swift; sourceTree = "<group>"; };
+		C49440FC27847D57000600CA /* SprintRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintRetriever.swift; sourceTree = "<group>"; };
+		C49440FE27847D6D000600CA /* SprintsReviewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintsReviewer.swift; sourceTree = "<group>"; };
+		C494410027847D85000600CA /* TicketsHistoryFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsHistoryFetcher.swift; sourceTree = "<group>"; };
+		C494410227847D9E000600CA /* TicketsInActiveSprintFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsInActiveSprintFetcher.swift; sourceTree = "<group>"; };
+		C4C5E8E82784496E00C59F65 /* jsr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsr; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4C5E8EB2784496E00C59F65 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C49440E627847D0F000600CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4C5E8E52784496E00C59F65 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -38,10 +85,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C49440DE278479DB000600CA /* SprintAccountant */ = {
+			isa = PBXGroup;
+			children = (
+				C49440DF278479F6000600CA /* SprintAccountant.swift */,
+				C49440E127847A05000600CA /* Ticket.swift */,
+				C49440E327847A22000600CA /* SprintAccount.swift */,
+			);
+			path = SprintAccountant;
+			sourceTree = "<group>";
+		};
+		C49440EA27847D0F000600CA /* jsn */ = {
+			isa = PBXGroup;
+			children = (
+				C49440EB27847D0F000600CA /* AppDelegate.swift */,
+				C49440FA27847D43000600CA /* FetchScheduler.swift */,
+				C49440FC27847D57000600CA /* SprintRetriever.swift */,
+				C49440FE27847D6D000600CA /* SprintsReviewer.swift */,
+				C494410027847D85000600CA /* TicketsHistoryFetcher.swift */,
+				C494410227847D9E000600CA /* TicketsInActiveSprintFetcher.swift */,
+				C49440ED27847D0F000600CA /* ViewController.swift */,
+				C49440EF27847D11000600CA /* Assets.xcassets */,
+				C49440F127847D11000600CA /* Main.storyboard */,
+				C49440F427847D11000600CA /* jsn.entitlements */,
+			);
+			path = jsn;
+			sourceTree = "<group>";
+		};
 		C4C5E8DF2784496E00C59F65 = {
 			isa = PBXGroup;
 			children = (
-				C4C5E8EA2784496E00C59F65 /* Jira Sprint Reporter */,
+				C4C5E8F22784499700C59F65 /* shared */,
+				C4C5E8EA2784496E00C59F65 /* jsr */,
+				C49440EA27847D0F000600CA /* jsn */,
 				C4C5E8E92784496E00C59F65 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,25 +125,57 @@
 		C4C5E8E92784496E00C59F65 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C4C5E8E82784496E00C59F65 /* Jira Sprint Reporter */,
+				C4C5E8E82784496E00C59F65 /* jsr */,
+				C49440E927847D0F000600CA /* jsn.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C4C5E8EA2784496E00C59F65 /* Jira Sprint Reporter */ = {
+		C4C5E8EA2784496E00C59F65 /* jsr */ = {
 			isa = PBXGroup;
 			children = (
 				C4C5E8EB2784496E00C59F65 /* main.swift */,
+				C49440D62784790B000600CA /* BoardsFetcher.swift */,
+				C49440D82784794E000600CA /* SprintsFetcher.swift */,
+				C49440DA278479B0000600CA /* BurndownFetcher.swift */,
+				C49440DC278479CC000600CA /* IssuesDetailsFetcher.swift */,
+				C49440DE278479DB000600CA /* SprintAccountant */,
 			);
-			path = "Jira Sprint Reporter";
+			path = jsr;
+			sourceTree = "<group>";
+		};
+		C4C5E8F22784499700C59F65 /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				C49440D2278477FF000600CA /* URLRequest+JIRA.swift */,
+				C49440D427847873000600CA /* Issue.swift */,
+			);
+			path = shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C4C5E8E72784496E00C59F65 /* Jira Sprint Reporter */ = {
+		C49440E827847D0F000600CA /* jsn */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C4C5E8EF2784496E00C59F65 /* Build configuration list for PBXNativeTarget "Jira Sprint Reporter" */;
+			buildConfigurationList = C49440F527847D11000600CA /* Build configuration list for PBXNativeTarget "jsn" */;
+			buildPhases = (
+				C49440E527847D0F000600CA /* Sources */,
+				C49440E627847D0F000600CA /* Frameworks */,
+				C49440E727847D0F000600CA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = jsn;
+			productName = jsn;
+			productReference = C49440E927847D0F000600CA /* jsn.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C4C5E8E72784496E00C59F65 /* jsr */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4C5E8EF2784496E00C59F65 /* Build configuration list for PBXNativeTarget "jsr" */;
 			buildPhases = (
 				C4C5E8E42784496E00C59F65 /* Sources */,
 				C4C5E8E52784496E00C59F65 /* Frameworks */,
@@ -77,9 +185,9 @@
 			);
 			dependencies = (
 			);
-			name = "Jira Sprint Reporter";
+			name = jsr;
 			productName = "Jira Sprint Reporter";
-			productReference = C4C5E8E82784496E00C59F65 /* Jira Sprint Reporter */;
+			productReference = C4C5E8E82784496E00C59F65 /* jsr */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -92,6 +200,9 @@
 				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 1300;
 				TargetAttributes = {
+					C49440E827847D0F000600CA = {
+						CreatedOnToolsVersion = 13.0;
+					};
 					C4C5E8E72784496E00C59F65 = {
 						CreatedOnToolsVersion = 13.0;
 					};
@@ -110,23 +221,126 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C4C5E8E72784496E00C59F65 /* Jira Sprint Reporter */,
+				C4C5E8E72784496E00C59F65 /* jsr */,
+				C49440E827847D0F000600CA /* jsn */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		C49440E727847D0F000600CA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C49440F027847D11000600CA /* Assets.xcassets in Resources */,
+				C49440F327847D11000600CA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		C49440E527847D0F000600CA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C494410127847D85000600CA /* TicketsHistoryFetcher.swift in Sources */,
+				C49440FB27847D43000600CA /* FetchScheduler.swift in Sources */,
+				C49440F827847D24000600CA /* URLRequest+JIRA.swift in Sources */,
+				C49440FF27847D6D000600CA /* SprintsReviewer.swift in Sources */,
+				C49440FD27847D57000600CA /* SprintRetriever.swift in Sources */,
+				C49440EE27847D0F000600CA /* ViewController.swift in Sources */,
+				C494410327847D9E000600CA /* TicketsInActiveSprintFetcher.swift in Sources */,
+				C49440EC27847D0F000600CA /* AppDelegate.swift in Sources */,
+				C49440F927847D27000600CA /* Issue.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4C5E8E42784496E00C59F65 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C49440DB278479B0000600CA /* BurndownFetcher.swift in Sources */,
+				C49440E0278479F6000600CA /* SprintAccountant.swift in Sources */,
 				C4C5E8EC2784496E00C59F65 /* main.swift in Sources */,
+				C49440D92784794E000600CA /* SprintsFetcher.swift in Sources */,
+				C49440E227847A05000600CA /* Ticket.swift in Sources */,
+				C49440D3278477FF000600CA /* URLRequest+JIRA.swift in Sources */,
+				C49440D72784790B000600CA /* BoardsFetcher.swift in Sources */,
+				C49440D527847873000600CA /* Issue.swift in Sources */,
+				C49440DD278479CC000600CA /* IssuesDetailsFetcher.swift in Sources */,
+				C49440E427847A22000600CA /* SprintAccount.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		C49440F127847D11000600CA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C49440F227847D11000600CA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		C49440F627847D11000600CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = jsn/jsn.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q6Y4K9ZAG4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tripactions.jsn;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C49440F727847D11000600CA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = jsn/jsn.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q6Y4K9ZAG4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tripactions.jsn;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		C4C5E8ED2784496E00C59F65 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -267,6 +481,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C49440F527847D11000600CA /* Build configuration list for PBXNativeTarget "jsn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C49440F627847D11000600CA /* Debug */,
+				C49440F727847D11000600CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C4C5E8E32784496E00C59F65 /* Build configuration list for PBXProject "Jira Sprint Reporter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -276,7 +499,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C4C5E8EF2784496E00C59F65 /* Build configuration list for PBXNativeTarget "Jira Sprint Reporter" */ = {
+		C4C5E8EF2784496E00C59F65 /* Build configuration list for PBXNativeTarget "jsr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C4C5E8F02784496E00C59F65 /* Debug */,

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1300"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C4C5E8E72784496E00C59F65"
+               BuildableName = "jsr"
+               BlueprintName = "jsr"
+               ReferencedContainer = "container:Jira Sprint Reporter.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "C4C5E8E72784496E00C59F65"
+            BuildableName = "jsr"
+            BlueprintName = "jsr"
+            ReferencedContainer = "container:Jira Sprint Reporter.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-c &quot;ajs_anonymous_id=%2295a65932-738a-46e9-91db-3e0daba4fc40%22; ajs_group_id=null; cloud.session.token=eyJraWQiOiJzZXNzaW9uLXNlcnZpY2VcL3Byb2QtMTU5Mjg1ODM5NCIsImFsZyI6IlJTMjU2In0.eyJhc3NvY2lhdGlvbnMiOltdLCJzdWIiOiI2MGEyM2VjNTVkNjdmMjAwNjkyYWE1NmYiLCJlbWFpbERvbWFpbiI6InRyaXBhY3Rpb25zLmNvbSIsImltcGVyc29uYXRpb24iOltdLCJjcmVhdGVkIjoxNjM0MjEwNTMxLCJyZWZyZXNoVGltZW91dCI6MTY0MDE3MDQ1NSwidmVyaWZpZWQiOnRydWUsImlzcyI6InNlc3Npb24tc2VydmljZSIsInNlc3Npb25JZCI6IjZjMjNiZDcyLWQ4OGUtNDc4MC05NDlhLTc0ZTQ3MGMzZTYwYiIsImF1ZCI6ImF0bGFzc2lhbiIsIm5iZiI6MTY0MDE2OTg1NSwiZXhwIjoxNjQyNzYxODU1LCJpYXQiOjE2NDAxNjk4NTUsImVtYWlsIjoianZhbmFzc2VsdEB0cmlwYWN0aW9ucy5jb20iLCJqdGkiOiI2YzIzYmQ3Mi1kODhlLTQ3ODAtOTQ5YS03NGU0NzBjM2U2MGIifQ.nh-cIPGdzlo-NOiJXeeF0IVczgi8ZUc9cq0qoTGR63eg-i059ALa3lpxpQ8lSQcVXQdgxcaUCNMsACljrD-y3LmhCa0GddenaYM5Cy8wFNIquv3wfTIg7a3dMpf6a1sZdDkP3VEA73L8tSw5B7cB5D1_EugwpNw0rw4HD5-0YPkX5RexYNhCnof_TAQb2ipiM_86IobUqWvBzpJ34In_A3YgdCUaWfrWqYHe092zvlXKXIjiyT9QEp9lEUZ0LqkfTN_lMR1WY1MRXYooR4UFDCKgQtop47I9Zxr-Blk5Rn5sJJ-cPY4yMNKmhIGR5SRlsUZqvqPuhq5L5-5czj25uQ; AJS.conglomerate.cookie=\&quot;|com.innovalog.jmwe.jira-misc-workflow-extensions$$is_user_admin=60a23ec55d67f200692aa56f/user\&quot;; JSESSIONID=76A566E55A214E170331D20F7B311EE3; __awc_tld_test__=tld_test; atlassian.xsrf.token=b38f75f3-7759-44f9-9f16-5cbbc9ed9706_a970c9cb55a665bbbd2b4436a17647091d325ccf_lin&quot; -p &quot;AVI&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "C4C5E8E72784496E00C59F65"
+            BuildableName = "jsr"
+            BlueprintName = "jsr"
+            ReferencedContainer = "container:Jira Sprint Reporter.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
