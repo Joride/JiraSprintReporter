@@ -47,7 +47,7 @@ class SprintRetriever
             case .inReview: break
             case .inProgress: break
             case .unexpected: break
-            case .closed:
+            case .closed, .releasedUnderSplit:
                 guard let doneDate = doneDate(for: aTicket)
                 else { fatalError("No Done date for ticket. What is going on?") }
                 
@@ -55,7 +55,7 @@ class SprintRetriever
                                                   issue: aTicket)
                 doneTickets.append(issueChange)
                 
-                if aTicket.fields.timespent == 0
+                if aTicket.fields.timespentHours == 0
                 {
                     if aTicket.fields.issueType.ticketType == .bug
                     {
@@ -113,7 +113,11 @@ class SprintRetriever
         
         if state == .unexpected { fatalError("Ticket with unexpected state encountered! This is unexpected and should be reviewed.") }
         
+        /// if the ticket is closed, the close date is returned
+        /// if the tickets is released under split we return that date
         
+        var closedDate: Date? = nil
+        var releasedUnderSplitDate: Date? = nil
         if let histories = issue.changelog?.histories
         {
             for aHistory in histories
@@ -122,15 +126,27 @@ class SprintRetriever
                 {
                     if aChange.field == "status"
                     {
-                        // confirm this is the correct aChange
-                        if aChange.toString == Fields.Status.State.closed.rawValue
+                        if aChange.toString == Fields.Status.State.closed.rawValue                    
                         {
-                            return aHistory.created
+                            closedDate = aHistory.created
+                        }
+                        
+                        if aChange.toString == Fields.Status.State.releasedUnderSplit.rawValue
+                        {
+                            releasedUnderSplitDate = aHistory.created
                         }
                     }
                 }
             }
         }
+        
+        if nil != closedDate && nil != releasedUnderSplitDate
+        {
+            return closedDate! > releasedUnderSplitDate! ? closedDate! : releasedUnderSplitDate!
+        }
+        if nil != closedDate { return closedDate }
+        if nil != releasedUnderSplitDate { return releasedUnderSplitDate }
+        
         return nil
     }
     

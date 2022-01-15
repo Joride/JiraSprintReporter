@@ -13,25 +13,11 @@ private let ProjectKeys = Set(["AVI", "EET"])
 private let FetchTimeInterval: TimeInterval = 15*60 // (15 minutes)
 private let cookieString = "ajs_anonymous_id=%2295a65932-738a-46e9-91db-3e0daba4fc40%22; ajs_group_id=null; cloud.session.token=eyJraWQiOiJzZXNzaW9uLXNlcnZpY2VcL3Byb2QtMTU5Mjg1ODM5NCIsImFsZyI6IlJTMjU2In0.eyJhc3NvY2lhdGlvbnMiOltdLCJzdWIiOiI2MGEyM2VjNTVkNjdmMjAwNjkyYWE1NmYiLCJlbWFpbERvbWFpbiI6InRyaXBhY3Rpb25zLmNvbSIsImltcGVyc29uYXRpb24iOltdLCJjcmVhdGVkIjoxNjM0MjEwNTMxLCJyZWZyZXNoVGltZW91dCI6MTY0MDE3MDQ1NSwidmVyaWZpZWQiOnRydWUsImlzcyI6InNlc3Npb24tc2VydmljZSIsInNlc3Npb25JZCI6IjZjMjNiZDcyLWQ4OGUtNDc4MC05NDlhLTc0ZTQ3MGMzZTYwYiIsImF1ZCI6ImF0bGFzc2lhbiIsIm5iZiI6MTY0MDE2OTg1NSwiZXhwIjoxNjQyNzYxODU1LCJpYXQiOjE2NDAxNjk4NTUsImVtYWlsIjoianZhbmFzc2VsdEB0cmlwYWN0aW9ucy5jb20iLCJqdGkiOiI2YzIzYmQ3Mi1kODhlLTQ3ODAtOTQ5YS03NGU0NzBjM2U2MGIifQ.nh-cIPGdzlo-NOiJXeeF0IVczgi8ZUc9cq0qoTGR63eg-i059ALa3lpxpQ8lSQcVXQdgxcaUCNMsACljrD-y3LmhCa0GddenaYM5Cy8wFNIquv3wfTIg7a3dMpf6a1sZdDkP3VEA73L8tSw5B7cB5D1_EugwpNw0rw4HD5-0YPkX5RexYNhCnof_TAQb2ipiM_86IobUqWvBzpJ34In_A3YgdCUaWfrWqYHe092zvlXKXIjiyT9QEp9lEUZ0LqkfTN_lMR1WY1MRXYooR4UFDCKgQtop47I9Zxr-Blk5Rn5sJJ-cPY4yMNKmhIGR5SRlsUZqvqPuhq5L5-5czj25uQ; AJS.conglomerate.cookie=\"|com.innovalog.jmwe.jira-misc-workflow-extensions$$is_user_admin=60a23ec55d67f200692aa56f/user\"; JSESSIONID=76A566E55A214E170331D20F7B311EE3; __awc_tld_test__=tld_test; atlassian.xsrf.token=b38f75f3-7759-44f9-9f16-5cbbc9ed9706_a970c9cb55a665bbbd2b4436a17647091d325ccf_lin"
 
-//extension NSImage
-//{
-//    static func symbolImage(named symbolName: String,
-//                            size: CGFloat,
-//                            weight: NSFont.Weight) -> NSImage
-//    {
-//        let config = NSImage.SymbolConfiguration(pointSize: size,
-//                                                 weight: weight)
-//
-//        guard let symbolImage = NSImage().withSymbolConfiguration(config)
-//        else { fatalError("Could not create symbol") }
-//
-//        return symbolImage
-//    }
-//}
-
 @main
 class AppDelegate: NSObject
 {
+    let projectIdentifiers = ["EET", "AVI"]
+    var sprintReportsGenerators = [SprintReportsGenerator]()
     fileprivate let PreviousFetchDateKey = "PreviousFetchDateKey"
     var viewController: ViewController?
     {
@@ -98,8 +84,8 @@ class AppDelegate: NSObject
                 for aKeyAndRapport in rapportsByKey
                 {
                     allDetails += "\(aKeyAndRapport.key) sprint:\n\(aKeyAndRapport.value.details)\n"
-                    self.sendNotification(title: "\(aKeyAndRapport.key) has changes",
-                                          body: aKeyAndRapport.value.summary)
+//                    self.sendNotification(title: "\(aKeyAndRapport.key) has changes",
+//                                          body: aKeyAndRapport.value.summary)
                 }
                 self.viewController?.textView.string = allDetails
                 self.updateMenuItemTitleAndState(for: false)
@@ -108,7 +94,6 @@ class AppDelegate: NSObject
         }
     }
 }
-
 
 extension AppDelegate: UNUserNotificationCenterDelegate
 {
@@ -156,18 +141,37 @@ extension AppDelegate: NSApplicationDelegate
         sprintsReviewer = SprintsReviewer(cookieString: cookieString,
                                           session: session)
     }
+    
+    var defaultImage: NSImage
+    {
+        guard let defaultImage = NSImage(systemSymbolName: "circle",
+                                                accessibilityDescription: nil)
+        else { fatalError("Could not create symbol") }
+        return defaultImage
+    }
+    var activityIndicatorImage: NSImage
+    {
+        guard let defaultImage = NSImage(systemSymbolName: "arrow.clockwise.circle",
+                                                accessibilityDescription: nil)
+        else { fatalError("Could not create symbol") }
+        return defaultImage
+    }
+    
     private func updateMenuItemTitleAndState(for isFetching: Bool)
     {
+        
         checkItem?.isEnabled = !isFetching
         if isFetching
         {
             self.checkItem?.title = NSLocalizedString("Currently Checking...", comment: "")
-            statusBarItem.button?.title = "꩜"
+//            statusBarItem.button?.title = "꩜"
+            statusBarItem.button?.image = activityIndicatorImage
         }
         else
         {
             self.checkItem?.title = NSLocalizedString("Check now", comment: "")
-            statusBarItem.button?.title = "◎"
+//            statusBarItem.button?.title = "◎"
+            statusBarItem.button?.image = defaultImage
         }
     }
     
@@ -178,7 +182,7 @@ extension AppDelegate: NSApplicationDelegate
         mainWindow?.title = "Jira Sprint Notifier"
         
         statusBarItem.button?.title = "◎"
-        let statusBarMenu = NSMenu(title: "Jira Sprint Notifier")
+        let statusBarMenu = NSMenu(title: "Jira Sprint Updates")
         statusBarItem.menu = statusBarMenu
         statusBarMenu.autoenablesItems = false
         
@@ -189,12 +193,16 @@ extension AppDelegate: NSApplicationDelegate
         self.checkItem = checkItem
         
         
-        let showWindowItem = NSMenuItem(title: "Show",
+        let showWindowItem = NSMenuItem(title: "Show Sprint Updates",
                                   action: #selector(AppDelegate.showWindow(sender:)),
                                   keyEquivalent: "")
         statusBarMenu.addItem(showWindowItem)
         
-        
+        let generateSprintRapportsItem =
+        NSMenuItem(title: "Generate Sprint Reports",
+                   action: #selector(AppDelegate.generateSprintReports(sender:)),
+                   keyEquivalent: "")
+        statusBarMenu.addItem(generateSprintRapportsItem)
         
         statusBarMenu.addItem(
             withTitle: NSLocalizedString("Quit", comment: ""),
@@ -207,6 +215,24 @@ extension AppDelegate: NSApplicationDelegate
 //        {
 //            self.checkSprints(sender: nil)
 //        }
+    }
+    
+    @objc private func generateSprintReports(sender: Any)
+    {
+        for anIdentifier in projectIdentifiers
+        {
+            let sprintReportsGenerator = SprintReportsGenerator(cookieString: cookieString,
+                                                                projectKey: anIdentifier,
+                                                                activeSprintOnly: true)
+            self.sprintReportsGenerators.append(sprintReportsGenerator)
+            sprintReportsGenerator.generateReports
+            {
+                DispatchQueue.main.async
+                {
+                    self.sprintReportsGenerators.removeAll { $0 === sprintReportsGenerator }
+                }
+            }
+        }
     }
     
     @objc private func showWindow(sender: Any)

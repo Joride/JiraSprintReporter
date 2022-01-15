@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A22F05B02792F43600F9E6C0 /* SprintReportsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22F05AF2792F43600F9E6C0 /* SprintReportsGenerator.swift */; };
+		A22F05B12792F61100F9E6C0 /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440E127847A05000600CA /* Ticket.swift */; };
+		A22F05B22792F61100F9E6C0 /* SprintAccountant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440DF278479F6000600CA /* SprintAccountant.swift */; };
+		A22F05B32792F61100F9E6C0 /* SprintAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440E327847A22000600CA /* SprintAccount.swift */; };
+		A22F05B42792F61500F9E6C0 /* BurndownFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440DA278479B0000600CA /* BurndownFetcher.swift */; };
+		A22F05B52792F61500F9E6C0 /* IssuesDetailsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440DC278479CC000600CA /* IssuesDetailsFetcher.swift */; };
+		A22F05B62792F61500F9E6C0 /* BoardsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D62784790B000600CA /* BoardsFetcher.swift */; };
+		A22F05B72792F61500F9E6C0 /* SprintsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D82784794E000600CA /* SprintsFetcher.swift */; };
 		C49440D3278477FF000600CA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
 		C49440D527847873000600CA /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D427847873000600CA /* Issue.swift */; };
 		C49440D72784790B000600CA /* BoardsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D62784790B000600CA /* BoardsFetcher.swift */; };
@@ -43,6 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A22F05AF2792F43600F9E6C0 /* SprintReportsGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintReportsGenerator.swift; sourceTree = "<group>"; };
 		C49440D2278477FF000600CA /* URLRequest+JIRA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+JIRA.swift"; sourceTree = "<group>"; };
 		C49440D427847873000600CA /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		C49440D62784790B000600CA /* BoardsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsFetcher.swift; sourceTree = "<group>"; };
@@ -99,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				C49440EB27847D0F000600CA /* AppDelegate.swift */,
+				A22F05AF2792F43600F9E6C0 /* SprintReportsGenerator.swift */,
 				C49440FA27847D43000600CA /* FetchScheduler.swift */,
 				C49440FC27847D57000600CA /* SprintRetriever.swift */,
 				C49440FE27847D6D000600CA /* SprintsReviewer.swift */,
@@ -244,14 +254,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A22F05B42792F61500F9E6C0 /* BurndownFetcher.swift in Sources */,
+				A22F05B12792F61100F9E6C0 /* Ticket.swift in Sources */,
+				A22F05B72792F61500F9E6C0 /* SprintsFetcher.swift in Sources */,
+				A22F05B22792F61100F9E6C0 /* SprintAccountant.swift in Sources */,
 				C494410127847D85000600CA /* TicketsHistoryFetcher.swift in Sources */,
 				C49440FB27847D43000600CA /* FetchScheduler.swift in Sources */,
 				C49440F827847D24000600CA /* URLRequest+JIRA.swift in Sources */,
+				A22F05B02792F43600F9E6C0 /* SprintReportsGenerator.swift in Sources */,
 				C49440FF27847D6D000600CA /* SprintsReviewer.swift in Sources */,
 				C49440FD27847D57000600CA /* SprintRetriever.swift in Sources */,
 				C49440EE27847D0F000600CA /* ViewController.swift in Sources */,
+				A22F05B62792F61500F9E6C0 /* BoardsFetcher.swift in Sources */,
 				C494410327847D9E000600CA /* TicketsInActiveSprintFetcher.swift in Sources */,
+				A22F05B52792F61500F9E6C0 /* IssuesDetailsFetcher.swift in Sources */,
 				C49440EC27847D0F000600CA /* AppDelegate.swift in Sources */,
+				A22F05B32792F61100F9E6C0 /* SprintAccount.swift in Sources */,
 				C49440F927847D27000600CA /* Issue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,7 +314,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q6Y4K9ZAG4;
+				DEVELOPMENT_TEAM = 2C6KT7L4EZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -323,7 +341,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q6Y4K9ZAG4;
+				DEVELOPMENT_TEAM = 2C6KT7L4EZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -460,7 +478,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q6Y4K9ZAG4;
+				DEVELOPMENT_TEAM = 2C6KT7L4EZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -471,7 +489,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q6Y4K9ZAG4;
+				DEVELOPMENT_TEAM = 2C6KT7L4EZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

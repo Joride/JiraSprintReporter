@@ -79,6 +79,7 @@ struct Fields: Decodable
             case inQA = "In QA"
             case inReview = "In Review"
             case closed = "Closed"
+            case releasedUnderSplit = "Released under Split"
             case inProgress = "In Progress"
             case unexpected
             init(rawValue: String)
@@ -93,6 +94,7 @@ struct Fields: Decodable
                 case Fields.Status.State.inQA.rawValue: self = .inQA
                 case Fields.Status.State.inReview.rawValue: self = .inReview
                 case Fields.Status.State.closed.rawValue, "Released under Split": self = .closed
+                case Fields.Status.State.releasedUnderSplit.rawValue: self = .releasedUnderSplit
                 case Fields.Status.State.inProgress.rawValue, "Ready For QA": self = .inProgress
                 default:
                     self = .unexpected
