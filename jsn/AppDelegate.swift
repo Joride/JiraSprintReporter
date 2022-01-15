@@ -21,7 +21,8 @@ class AppDelegate: NSObject
     fileprivate let PreviousFetchDateKey = "PreviousFetchDateKey"
     var viewController: ViewController?
     {
-        /// Yeah this line hurst my eyes too
+        /// Yeah this line hurst my eyes too, please educate me on how
+        /// to do this properly - Jorrit
         return mainWindow?.contentViewController as? ViewController
     }
     var mainWindow: NSWindow?
@@ -177,37 +178,42 @@ extension AppDelegate: NSApplicationDelegate
     
     func applicationDidFinishLaunching(_ aNotification: Notification)
     {
-        /// Yeah this next line is not very nice
         mainWindow?.close()
         mainWindow?.title = "Jira Sprint Notifier"
         
         statusBarItem.button?.title = "◎"
-        let statusBarMenu = NSMenu(title: "Jira Sprint Updates")
+        let statusBarMenu = NSMenu(title: NSLocalizedString("Jira Sprint Updates", comment: ""))
         statusBarItem.menu = statusBarMenu
         statusBarMenu.autoenablesItems = false
         
         let checkItem = NSMenuItem(title: "",
                                   action: #selector(AppDelegate.checkSprints(sender:)),
-                                  keyEquivalent: "")
+                                  keyEquivalent: "c")
         statusBarMenu.addItem(checkItem)
         self.checkItem = checkItem
         
         
-        let showWindowItem = NSMenuItem(title: "Show Sprint Updates",
+        let showWindowItem = NSMenuItem(title: NSLocalizedString("Show Sprint Updates", comment: ""),
                                   action: #selector(AppDelegate.showWindow(sender:)),
-                                  keyEquivalent: "")
+                                  keyEquivalent: "s")
         statusBarMenu.addItem(showWindowItem)
         
         let generateSprintRapportsItem =
-        NSMenuItem(title: "Generate Sprint Reports",
+        NSMenuItem(title: NSLocalizedString("Generate Sprint Reports", comment: ""),
                    action: #selector(AppDelegate.generateSprintReports(sender:)),
-                   keyEquivalent: "")
+                   keyEquivalent: "g")
         statusBarMenu.addItem(generateSprintRapportsItem)
+        
+        let settingsItem =
+        NSMenuItem(title: NSLocalizedString("Settings", comment: ""),
+                   action: #selector(AppDelegate.showSettingsWindow(sender:)),
+                   keyEquivalent: ",")
+        statusBarMenu.addItem(settingsItem)
         
         statusBarMenu.addItem(
             withTitle: NSLocalizedString("Quit", comment: ""),
             action: #selector(NSApplication.terminate(_:)),
-            keyEquivalent: "")
+            keyEquivalent: "q")
         
         updateMenuItemTitleAndState(for: false)
         
@@ -217,6 +223,11 @@ extension AppDelegate: NSApplicationDelegate
 //        }
     }
     
+    @objc private func showSettingsWindow(sender: Any)
+    {
+        
+        
+    }
     @objc private func generateSprintReports(sender: Any)
     {
         for anIdentifier in projectIdentifiers
