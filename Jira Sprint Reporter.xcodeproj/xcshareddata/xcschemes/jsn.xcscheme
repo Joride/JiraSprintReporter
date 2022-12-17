@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1300"
+   LastUpgradeVersion = "1320"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C4C5E8E72784496E00C59F65"
-               BuildableName = "jsr"
-               BlueprintName = "jsr"
+               BlueprintIdentifier = "C49440E827847D0F000600CA"
+               BuildableName = "jsn.app"
+               BlueprintName = "jsn"
                ReferencedContainer = "container:Jira Sprint Reporter.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,18 +44,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C4C5E8E72784496E00C59F65"
-            BuildableName = "jsr"
-            BlueprintName = "jsr"
+            BlueprintIdentifier = "C49440E827847D0F000600CA"
+            BuildableName = "jsn.app"
+            BlueprintName = "jsn"
             ReferencedContainer = "container:Jira Sprint Reporter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "-c &quot;ajs_anonymous_id=%2252536d0b-e823-497d-9e9c-b3b2d3d11fbe%22; cloud.session.token=eyJraWQiOiJzZXNzaW9uLXNlcnZpY2VcL3Byb2QtMTU5Mjg1ODM5NCIsImFsZyI6IlJTMjU2In0.eyJhc3NvY2lhdGlvbnMiOltdLCJzdWIiOiI2MmQ2ZTIwZTY1N2ZjMTY2ZTI2MDM5OTkiLCJlbWFpbERvbWFpbiI6InJlY2hhcmdlLmNvbSIsImltcGVyc29uYXRpb24iOltdLCJjcmVhdGVkIjoxNjU5MzQwMjE4LCJyZWZyZXNoVGltZW91dCI6MTY3MTA0Mzk0NCwidmVyaWZpZWQiOnRydWUsImlzcyI6InNlc3Npb24tc2VydmljZSIsInNlc3Npb25JZCI6IjJiNzFkNmI4LTc1MzQtNGU1NS05ZDdlLTNmNWIwZGY2NWVmOSIsInN0ZXBVcHMiOltdLCJhdWQiOiJhdGxhc3NpYW4iLCJuYmYiOjE2NzEwNDMzNDQsImV4cCI6MTY3MzYzNTM0NCwiaWF0IjoxNjcxMDQzMzQ0LCJlbWFpbCI6ImpvcnJpdC52YW4uYXNzZWx0QHJlY2hhcmdlLmNvbSIsImp0aSI6IjJiNzFkNmI4LTc1MzQtNGU1NS05ZDdlLTNmNWIwZGY2NWVmOSJ9.eANx_lFmfIWfSGaXkHAAYoHWnBraKt_upxyWAd7fDicv4AwzIvE9fmhovEWOMkEzn4Ik67gnZ6Rl7x6sDMKAFYip3KzNcCuF85Mp0vsImg1emMmNn9p-5wl4qgtJASR-xToftANXE7x7JEs1uJKZ29flXVHEZEVRg86OPRZsdJ32TzB0-R0HJ1gfAQYhvBt4NWJLINx2cwK7AjdQCwx-iyAXrv_5FBfioEU6ACjKsJAbn-SvbRnPcFeXSua0q1-ggGlKLBI4JtGjsV8WE9JNqsLrl8vuCt5SYGF-6NUo7G6VgMaQfW4R2ihvwoZ6Gd5rME8L5bL085vgYxfse-0QMw; JSESSIONID=804FFBEEA9528B5E35C9FE89C27BF045; atlassian.xsrf.token=4e812620-4710-4353-b78a-d35220e2626a_61304be74fbce634ec5fd5846a9f330196afee6e_lin&quot; -p &quot;MT&quot;&quot;"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -67,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C4C5E8E72784496E00C59F65"
-            BuildableName = "jsr"
-            BlueprintName = "jsr"
+            BlueprintIdentifier = "C49440E827847D0F000600CA"
+            BuildableName = "jsn.app"
+            BlueprintName = "jsn"
             ReferencedContainer = "container:Jira Sprint Reporter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

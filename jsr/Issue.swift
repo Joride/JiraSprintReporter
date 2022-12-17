@@ -7,22 +7,33 @@
 
 import Foundation
 
+/// Typed representation of a jira issue. Used by `BurndownFetcher`,
+/// `IssuesDetailsFetcher` and `SprintAccountant`
 struct Issue: Decodable
 {
     let key: String
     let fields: Fields
 }
 
+/// Typed representation of a the fields inside a jira issue.
 struct Fields: Decodable
 {
+    let summary: String
     let customfield_10874: Double?
 //    let customfield_10708: String?
-    var timespentHours: Double
+    var timespentHours: Double?
     {
-        customfield_10874 ?? 0
+        customfield_10874
 //        Double(customfield_10874 ?? "") ?? 0
     }
-    let storyPoints: Int?
+    
+//    let validStoryPointValues: [Int] = [1,2,3,5,8,13,21,34,55,89]
+//    func validateStoryPoints() -> Bool
+//    {
+//        validStoryPointValues.contains(storyPoints ?? 0)
+//    }
+    
+    let storyPoints: Double?
     let issueType: IssueType
     struct IssueType: Decodable
     {
@@ -44,12 +55,14 @@ struct Fields: Decodable
                 case Fields.IssueType.TicketType.design.rawValue: self = .design
                 case Fields.IssueType.TicketType.task.rawValue: self = .task
                 case Fields.IssueType.TicketType.subtask.rawValue: self = .subtask
+                case Fields.IssueType.TicketType.epic.rawValue: self = .epic
                 default:
                     self = .unexpected
                     fatalError("Unexpected TicketType encountered. This needs to be properly handled")
                     
                 }
             }
+            case epic = "Epic"
             case bug = "Bug"
             case userStory = "Story"
             case improvement = "Improvement"
@@ -117,12 +130,13 @@ struct Fields: Decodable
     }
     enum CodingKeys: String, CodingKey
     {
+        case summary
         case customfield_10874 // represents the custom 'Time Spent, Hours'
         case status
         case assignee
         case participants = "customfield_10872"
         case issueType = "issuetype"
-        case storyPoints = "customfield_10057"
+        case storyPoints = "customfield_10037"
     }
 }
 

@@ -11,7 +11,7 @@ struct Ticket
 {
     enum TicketType
     {
-        case userStory(Int?) // associated value is the number of storypoints assigned to it
+        case userStory(Double?) // associated value is the number of storypoints assigned to it
         case task(Double?)   // associated value is the timeestimate associated with it
         case bug(Double?)    // associated value is the timeestimate associated with it
         case other
@@ -23,12 +23,26 @@ struct Ticket
         {
             switch rawValue
             {
-            case "Open", "open", "New / Triage": self = .todo
-            case "In Design Review", "In Progress", "Blocked", "In Review", "Re-opened", "In QA", "Ready For QA": self = .notDone
-            case "Closed", "Released under Split": self = .done
+            case "To Do": self = .todo
+            case "In Progress",
+                "Open",
+                "Code approved",
+                "On Hold",
+                "Ready for QA",
+                "Ready for code review",
+                "Ready to deploy",
+                "Needs Improvement",
+                "Ready for review",
+                "Design review",
+                "In Delivery",
+                "Review": self = .notDone
+            case "Done",
+                "Won't fix",
+                "Closed",
+                 "Delivered": self = .done
             default:
                 self = .unexpected
-                fatalError("Unexpected Ticket Type encountered. This needs to be properly handled")
+                fatalError("\"\(rawValue)\" Unexpected Ticket Type encountered. This needs to be properly handled:")
             }
         }
         case todo

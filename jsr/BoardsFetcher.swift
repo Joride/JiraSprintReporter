@@ -7,7 +7,8 @@
 
 import Foundation
 
-/// Imports all the boards that exist in JIRA.
+/// Exists to encapuate the paging behaviour of the jira api call to fetch
+/// ALL the boards for the company.
 class BoardsFetcher
 {
     /// The projectIdentifier this instance was initialized with
@@ -19,81 +20,60 @@ class BoardsFetcher
     private var boards = [Board]()
     
     /// internal queue for serializing accesss to the 1 `boards` property
+    /// while populating it with repeated network calls
     private let queue = DispatchQueue(label: "BoardsFetcher")
     
     init(cookieString: String,
-         session: URLSession? = URLSession(configuration: .ephemeral),
-         fetchResult: @escaping ([Board]?) -> (Void))
+         session: URLSession? = URLSession(configuration: .ephemeral))
     {
         self.cookieString = cookieString
         self.session = session ?? URLSession(configuration: .ephemeral)
-        fetch(result: fetchResult)
     }
     
-    private func fetch(result: @escaping ([Board]?) -> (Void), startAt: Int = 0 )
+    func fetch(startAt: Int = 0) async -> [Board]?
     {
-        /// https://tripactions.atlassian.net/rest/agile/1.0/board?startAt=100"
-        let urlString = "https://tripactions.atlassian.net/rest/agile/1.0/board?startAt=\(startAt)"
+        let request = newRequest(startAt: startAt)
+        do
+        {
+            let (data, response) = try await session.data(for: request)
+            response.checkRateLimit()
+            
+            let decoder = JSONDecoder()
+            let boardResults = try decoder.decode(BoardsResults.self,
+                                                    from: data)
+            
+            /// serialize access to the mutable array `boards`
+            queue.sync { self.boards.append(contentsOf: boardResults.values) }
+            
+            if !boardResults.isLast
+            {
+                // calling fetch again will append new results to the private
+                // instance variable. Which is the variable we return once
+                // we reach the last set, so no need to capture the return value
+                // here.
+                let _ = await fetch(startAt: boardResults.startAt)
+            }
+        }
+        catch
+        {
+            print("Could not download data for \(request.url?.description ?? "no url in the request!"): \(error)")
+        }
+        return boards
+    }
+    
+    private func newRequest(startAt: Int = 0) -> URLRequest
+    {
+        let urlString = "https://creativegroupdev.atlassian.net/rest/agile/1.0/board?startAt=\(startAt)"
         
         guard let url = URL(string: urlString)
         else { fatalError("Could not create URL from \(urlString)") }
         
         let request = URLRequest.jiraRequestWith(url: url, cookieString: cookieString)
-        let task = session.dataTask(with: request)
-        { (data: Data?,
-           response: URLResponse?,
-           error: Error?) in
-                        self.processResults(data: data,
-                                error: error,
-                                result: result)
-            
-        }
-        let _ = task.resume()
-    }
-    
-    
-    
-    private func processResults(data: Data?,
-                                error: Error?,
-                                result: @escaping ([Board]?) -> (Void))
-    {
-        if let error = error
-        {
-            print("Could not download ticket info: \(error)")
-        }
-        else
-        {
-            guard let jsonData = data
-            else { fatalError("No error, but no data or no response either. HUH?") }
-            
-            do
-            {
-                let decoder = JSONDecoder()
-                let boardResults = try decoder.decode(BoardsResults.self,
-                                                        from: jsonData)
-                
-                queue.sync { self.boards.append(contentsOf: boardResults.values) }
-                
-                /// Knowing the total and the maxResults per call, this could
-                /// be optimized by doing the network calls in parallel.
-                if !boardResults.isLast
-                {
-                    fetch(result: result, startAt: self.boards.count)
-                }
-                else
-                {
-                    assert(self.boards.count == boardResults.total)
-                    result(self.boards)
-                }
-            }
-            catch
-            {
-                print("Could not decode JSONData: \(error)")
-            }
-        }
+        return request
     }
 }
     
+/// Typed representation of the JSON that jira api returns
 struct BoardsResults: Decodable
 {
     let maxResults: Int
@@ -103,6 +83,7 @@ struct BoardsResults: Decodable
     let values: [Board]
 }
 
+/// Typed representation of the board JSON that jira api returns
 struct Board: Decodable, CustomStringConvertible
 {
     var description: String
@@ -137,6 +118,5 @@ struct Board: Decodable, CustomStringConvertible
             """
         }
     }
-    
 }
 

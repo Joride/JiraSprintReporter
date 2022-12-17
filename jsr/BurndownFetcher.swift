@@ -7,6 +7,11 @@
 
 import Foundation
 
+/// Encapsulates fetching and organizing the burndown of tickets for a sprint
+/// within a project.
+/// Note: this burndown is not the same as the burndown in Jira's web front-end:
+/// tickets of any and all types are included in the burndown here, whereas in
+/// jira only stories are shown.
 class BurndownFetcher
 {
     /// The sprintID with with this instance was initialized
@@ -20,91 +25,88 @@ class BurndownFetcher
     
     private let session: URLSession
     
-    init(sprint: Sprint,
-         projectID: Int,
-         cookieString: String,
-         session: URLSession? = URLSession(configuration: .ephemeral),
-         fetchResult: @escaping (SprintIssueKeys?) -> (Void))
+    private func newRequest() -> URLRequest
     {
-        self.sprint = sprint
-        self.projectID = projectID
-        self.cookieString = cookieString
-        self.session = session ?? URLSession(configuration: .ephemeral)
-        fetch(result: fetchResult)
-        
-    }
-
-    private func fetch(result: @escaping (SprintIssueKeys?) -> (Void) )
-    {
-        let urlString = "https://tripactions.atlassian.net/rest/greenhopper/1.0/rapid/charts/scopechangeburndownchart?rapidViewId=\(projectID)&sprintId=\(sprint.id)"
+        let urlString = "https://creativegroupdev.atlassian.net/rest/greenhopper/1.0/rapid/charts/scopechangeburndownchart?rapidViewId=\(projectID)&sprintId=\(sprint.id)"
         
         guard let url = URL(string: urlString)
         else { fatalError("Could not create URL from \(urlString)") }
         
         let request = URLRequest.jiraRequestWith(url: url, cookieString: cookieString)
-        let task = session.dataTask(with: request) { (data: Data?,
-                                                      response: URLResponse?,
-                                                      error: Error?) in
-            if let error = error
-            {
-                print("Could not download ticket info: \(error)")
-            }
-            else
-            {
-                guard let jsonData = data
-                else { fatalError("No error, but no data or no response either. HUH?") }
-                
-                do
-                {
-                    let decoder = JSONDecoder()
-                    decoder.dateDecodingStrategy = .millisecondsSince1970
-                    let burndownInfo = try decoder.decode(BurndownInfo.self,
-                                                          from: jsonData)
-                    self.process(burndownInfo, result: result)
-                }
-                catch
-                {
-                    print("Could not decode JSONData: \(error)")
-                }
-            }
-        }
-        let _ = task.resume()
+        return request
     }
     
-    private func process(_ burndownInfo: BurndownInfo,
-                         result: (SprintIssueKeys?) -> (Void) )
+    init(sprint: Sprint,
+         projectID: Int,
+         cookieString: String,
+         session: URLSession? = URLSession(configuration: .ephemeral))
     {
-        var commitment = Set<String>()
-        var insertions = Set<String>()
-        for aChangeInfoList in burndownInfo.changes.items
+        self.sprint = sprint
+        self.projectID = projectID
+        self.cookieString = cookieString
+        self.session = session ?? URLSession(configuration: .ephemeral)        
+    }
+    
+    func fetch() async -> SprintIssueKeys?
+    {
+        let request = newRequest()
+        do
         {
-            for aChangeInfo in aChangeInfoList
+            let (jsonData, response) = try await session.data(for: request)
+            response.checkRateLimit()
+            
+            do
             {
-                // if this issue was added and that addition happened before or at the starttime of the
-                // sprint, this issue is part of the commitmenet (this includes ALL types, and the burn
-                // down chart in jira only shows a subset of type. Most notably, no sub tasks are shown in jira,
-                // but those WILL show up here
-                if (aChangeInfo.added ?? false)
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .millisecondsSince1970
+                let burndownInfo = try decoder.decode(BurndownInfo.self,
+                                                      from: jsonData)
+                
+                var commitment = Set<String>()
+                var insertions = Set<String>()
+                for aChangeInfoList in burndownInfo.changes.items
                 {
-                    if aChangeInfo.timestamp <= burndownInfo.startTime
+                    for aChangeInfo in aChangeInfoList
                     {
-                        // part of commitment
-                        commitment.insert(aChangeInfo.key)
-                    }
-                    else
-                    {
-                        // part of insertions
-                        insertions.insert(aChangeInfo.key)
+                        // if this issue was added and that addition happened before or at the starttime of the
+                        // sprint, this issue is part of the commitment (this includes ALL types, and the burn
+                        // down chart in jira only shows a subset of type. Most notably, no sub tasks are shown in jira,
+                        // but those WILL show up here
+                        if (aChangeInfo.added ?? false)
+                        {
+                            
+                            // - TODO: check if the issue was "closed", "delivered" etc before the sprint started?
+                            if aChangeInfo.timestamp <= burndownInfo.startTime
+                            {
+                                // part of commitment
+                                commitment.insert(aChangeInfo.key)
+                            }
+                            else
+                            {
+                                // part of insertions
+                                insertions.insert(aChangeInfo.key)
+                            }
+                        }
                     }
                 }
+                let sprintIssueKeys = SprintIssueKeys(commitment: commitment,
+                                                      insertions: insertions)
+                return sprintIssueKeys
+            }
+            catch
+            {
+                print("Could not decode JSONData: \(error) \n\n\(String(data: jsonData, encoding: .utf8) ?? "❌")")
             }
         }
-        let sprintIssueKeys = SprintIssueKeys(commitment: commitment,
-                                              insertions: insertions)
-        result(sprintIssueKeys)
+        catch
+        {
+            print("Could not download data for \(request.url?.description ?? "no url in the request!"): \(error)")
+        }
+        return nil
     }
 }
 
+/// Containering two sets of issues representing different things
 struct SprintIssueKeys
 {
     let commitment: Set<String>
@@ -113,13 +115,15 @@ struct SprintIssueKeys
 
 
 
-// MARK: - Burndown info from JSON
+/// Typed representation of the burndown JSON that the jira api returns
 struct BurndownInfo: Decodable
 {
     var startTime: Date
     var endTime: Date
     var changes: DecodedArray
 }
+
+/// Typed representation of the change concept in JSON that the jira api returns
 struct Change: Decodable
 {
     let key: String
@@ -160,12 +164,12 @@ struct Change: Decodable
     }
 }
 
-
+/// Needed when JSON comes in that is a top-level array
 struct DecodedArray: Decodable
 {
     var items: [[Change]]
     
-    // Define DynamicCodingKeys type needed for creating
+    // Defining DynamicCodingKeys type needed for creating
     // decoding container from JSONDecoder
     private struct DynamicCodingKeys: CodingKey
     {

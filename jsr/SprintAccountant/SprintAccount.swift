@@ -218,11 +218,11 @@ struct SprintAccount: CustomStringConvertible, CustomDebugStringConvertible
     /// Hours spent on tasks from interruptions only
     let timespentOnTasksFromInsertions: Double
 
-    let committedStorypoints: Int
+    let committedStorypoints: Double
     
-    let insertedStorypoints: Int
+    let insertedStorypoints: Double
 
-    let totalStorypoints: Int
+    let totalStorypoints: Double
 
     // Total hours spent on bugs
     let totalTimeSpentOnBugs: Double
@@ -240,8 +240,8 @@ struct SprintAccount: CustomStringConvertible, CustomDebugStringConvertible
     let bugsDoneFromCommitment: Int
     let bugsDoneFromInsertions: Int
     
-    let storypointsFromCommitmentDone: Int
-    let storypointsFromInsertionsDone: Int
+    let storypointsFromCommitmentDone: Double
+    let storypointsFromInsertionsDone: Double
     
     var description: String { commaSeparatedValues() }
     var debugDescription: String { description }

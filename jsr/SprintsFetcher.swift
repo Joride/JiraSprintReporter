@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// Fetches general information on all sprints that exist
-/// for the given projectIdentifier.
+/// Encapsulates fetching and decoding general (i.e. no details) information
+/// on all sprints that exist for the given projectIdentifier.
 class SprintsFetcher
 {
     /// The projectIdentifier this instance was initialized with
@@ -22,7 +22,8 @@ class SprintsFetcher
     /// Should only ever be accessed on the internal queue
     private var sprints = [Sprint]()
     
-    /// internal queue for serializing accesss to the 1 `boards` property
+    /// internal queue for serializing accesss to the 1 `sprints` property
+    /// while populating it with repeated network calls
     private let queue = DispatchQueue(label: "SprintsFetcher")
     
     private let JIRASprintDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -35,15 +36,60 @@ class SprintsFetcher
         formatter.locale = Locale(identifier: "en_US_POSIX")
         return formatter
     }
+    
+    private func newRequest(startAt: Int) -> URLRequest
+    {
+        let urlString = "https://creativegroupdev.atlassian.net/rest/agile/1.0/board/\(projectIdentifier)/sprint?startAt=\(startAt)"
+        
+        guard let url = URL(string: urlString)
+        else { fatalError("Could not create URL from \(urlString)") }
+        
+        let request = URLRequest.jiraRequestWith(url: url, cookieString: cookieString)
+        return request
+    }
+
     init(projectIdentifier: Int,
          cookieString: String,
-         session: URLSession? = URLSession(configuration: .ephemeral),
-         fetchResult: @escaping ([Sprint]?) -> (Void))
+         session: URLSession? = URLSession(configuration: .ephemeral))
     {
         self.projectIdentifier = projectIdentifier
         self.cookieString = cookieString
         self.session = session ?? URLSession(configuration: .ephemeral)
-        fetch(result: fetchResult)
+    }
+    func fetch(startAt: Int = 0) async -> [Sprint]
+    {
+        let request = newRequest(startAt: startAt)
+        do
+        {
+            let (jsonData, response) = try await session.data(for: request)
+            response.checkRateLimit()
+            
+            do
+            {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .custom(self.decodeDate)
+                let sprintResults = try decoder.decode(SprintsResults.self,
+                                                        from: jsonData)
+                
+                queue.sync { self.sprints.append(contentsOf: sprintResults.values) }
+                
+                /// Since the total is unknown, this here cannot be optimized
+                /// by doing the network calls in parallel.
+                if !sprintResults.isLast
+                {
+                    let _ = await fetch(startAt: sprints.count)
+                }
+            }
+            catch
+            {
+                print("Could not decode JSONData: \(error) \n\n\(String(data: jsonData, encoding: .utf8) ?? "❌")")
+            }
+        }
+        catch
+        {
+            print("Could not download data for \(request.url?.description ?? "no url in the request!"): \(error)")
+        }
+        return sprints
     }
     
     private enum DateDecoderError: Error
@@ -66,67 +112,9 @@ class SprintsFetcher
             throw(DateDecoderError.dateFormatterFailed)
         }
     }
-    
-    private func fetch(result: @escaping ([Sprint]?) -> (Void), startAt: Int = 0 )
-    {
-        let urlString = "https://tripactions.atlassian.net/rest/agile/1.0/board/\(projectIdentifier)/sprint?startAt=\(startAt)"
-        
-        guard let url = URL(string: urlString)
-        else { fatalError("Could not create URL from \(urlString)") }
-        
-        let request = URLRequest.jiraRequestWith(url: url, cookieString: cookieString)
-        let task = session.dataTask(with: request) { (data: Data?,
-                                                      response: URLResponse?,
-                                                      error: Error?) in
-            self.processResults(data: data,
-                                error: error,
-                                result: result)
-        }
-        let _ = task.resume()
-    }
-    
-    private func processResults(data: Data?,
-                                error: Error?,
-                                result: @escaping ([Sprint]?) -> (Void))
-    {
-        if let error = error
-        {
-            print("Could not download ticket info: \(error)")
-        }
-        else
-        {
-            guard let jsonData = data
-            else { fatalError("No error, but no data or no response either. HUH?") }
-                        
-            do
-            {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .custom(self.decodeDate)
-                let sprintResults = try decoder.decode(SprintsResults.self,
-                                                        from: jsonData)
-                
-                queue.sync { self.sprints.append(contentsOf: sprintResults.values) }
-                
-                /// Since the total is unkwonw, this here cannot be optimized
-                /// by doing the network calls in parallel.
-                if !sprintResults.isLast
-                {
-                    fetch(result: result, startAt: sprints.count)
-                }
-                else
-                {
-                    result(sprints)
-                }
-            }
-            catch
-            {
-                print("Could not decode JSONData: \(error)")
-            }
-        }
-    }
-    
 }
 
+/// Typed representation of the JSON that jira api returns
 struct SprintsResults: Decodable
 {
     let maxResults: Int
@@ -136,6 +124,7 @@ struct SprintsResults: Decodable
     let values: [Sprint]
 }
 
+/// Typed representation of the Sprint JSON that the jira api returns
 struct Sprint: Decodable
 {
     enum State: String

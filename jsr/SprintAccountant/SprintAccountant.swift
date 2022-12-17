@@ -16,7 +16,7 @@ import Foundation
 class SprintAccountant
 {
     private var queue = DispatchQueue(label: "SprintAccountant")
-    private let sprintAccount: (SprintAccount) -> Void
+    private var sprintAccount: ((SprintAccount) -> Void)? = nil
     
     /// The sprintID this instance was initialized with
     let sprintID: Int
@@ -37,52 +37,26 @@ class SprintAccountant
          startTime: Date?,
          endTime: Date?,
          name: String?,
-         goal: String?,
-         sprintAccount: @escaping (SprintAccount) -> Void)
+         goal: String?)
     {
         self.sprintID = sprintID
-        self.sprintAccount = sprintAccount
         self.startTime = startTime
         self.endTime = endTime
         self.name = name
         self.goal = goal
-       
-    }
-    private var _committedIssues: [Issue]? = nil
-    func set(committedIssues: [Issue])
-    {
-        // if both `_commitedIssues` and `_insertedIssues` are non-nil, they can be processed
-        queue.async
-        {
-            /// `_committedIssues` can only be set once
-            assert(nil == self._committedIssues)
-            self._committedIssues = committedIssues
-            
-            /// if both `_commitedIssues` and `_insertedIssues` are non-nil, they can be processed
-            if nil != self._insertedIssues { self.processIssues() }
-        }
     }
     
-    private var _insertedIssues: [Issue]? = nil
-    func set(insertedIssues: [Issue])
+    func sprintAccount(for committedIssues: [Issue],
+                       insertedIssues: [Issue]) -> SprintAccount
     {
-        /// if both `_commitedIssues` and `_insertedIssues` are non-nil, they can be processed
-        queue.async
-        {
-            /// `_insertedIssues` can only be set once
-            assert(nil == self._insertedIssues)
-            self._insertedIssues = insertedIssues
-            
-            if nil != self._committedIssues { self.processIssues() }
-        }
+        let sprintAccount = processIssues(for: committedIssues,
+                                          insertedIssues: insertedIssues)
+        return sprintAccount
     }
     
-    private func processIssues()
-    {
-        guard let committedIssues = _committedIssues,
-                let insertedIssues = _insertedIssues
-        else { fatalError("Nil value found for committed issues or inserted issues") }
-                
+    private func processIssues(for committedIssues: [Issue],
+                               insertedIssues: [Issue]) -> SprintAccount
+    {                
         func separate(storiesBugsAndTasksFrom issues: [Issue]) -> (stories: [Ticket],
                                                                    bugs: [Ticket],
                                                                    tasks: [Ticket])
@@ -141,7 +115,6 @@ class SprintAccountant
                                              insertedUserStories: separatedInsertedTickets.stories,
                                              insertedTasks: separatedInsertedTickets.tasks,
                                              insertedBugs: separatedInsertedTickets.bugs)
-        
-        sprintAccount(newSprintAccount)
+        return newSprintAccount
     }
 }

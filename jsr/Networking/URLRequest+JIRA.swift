@@ -9,6 +9,8 @@ import Foundation
 
 extension URLRequest
 {
+    /// Returns a URLRequest with some basic, hardcoded headerfields specific to
+    /// Jira api.
     static func jiraRequestWith(url: URL, cookieString: String) -> URLRequest
     {
         var request = URLRequest(url: url)

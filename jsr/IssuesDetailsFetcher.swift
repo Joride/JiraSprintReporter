@@ -7,19 +7,10 @@
 
 import Foundation
 
+/// Encapsulates all downloading and decoding details for issues (i.e. any
+/// type of ticket with its own number in jira)
 class IssuesDetailsFetcher
 {
-    init(issueKeys: Set<String>,
-         cookieString: String,
-         session: URLSession? = URLSession(configuration: .ephemeral),
-         fetchResult: @escaping ([Issue]?) -> (Void))
-    {
-        assert(!issueKeys.isEmpty)
-        self.cookieString = cookieString
-        self.issueKeys = issueKeys
-        self.session = session ?? URLSession(configuration: .ephemeral)
-        fetch(result: fetchResult)
-    }
     private let session: URLSession
     
     /// The cookieString this instance was initialized with
@@ -27,8 +18,17 @@ class IssuesDetailsFetcher
     
     /// The issueKeys this instance was initialized with
     let issueKeys: Set<String>
-        
-    private func fetch(result: @escaping ([Issue]?) -> (Void))
+    
+    init(issueKeys: Set<String>,
+         cookieString: String,
+         session: URLSession? = URLSession(configuration: .ephemeral))
+    {
+        assert(!issueKeys.isEmpty)
+        self.cookieString = cookieString
+        self.issueKeys = issueKeys
+        self.session = session ?? URLSession(configuration: .ephemeral)
+    }
+    func fetch() async -> [Issue]?
     {
         var keysString = ""
         let sortedKeys = issueKeys.sorted(by: { $0 > $1 } )
@@ -45,42 +45,37 @@ class IssuesDetailsFetcher
         }
         
         let jqlQuery = "issuekey%20in%20(\(keysString))"
-        let urlString = "https://tripactions.atlassian.net/rest/api/3/search?jql=\(jqlQuery)"
+        let urlString = "https://creativegroupdev.atlassian.net/rest/api/3/search?jql=\(jqlQuery)"
         guard let url = URL(string: urlString)
         else { fatalError("Could not create URL from \(urlString)") }
         
         let request = URLRequest.jiraRequestWith(url: url, cookieString: cookieString)
         
-        let task = session.dataTask(with: request) { (data: Data?,
-                                                      response: URLResponse?,
-                                                      error: Error?) in
-            if let error = error
+        do
+        {
+            let (jsonData, response) = try await session.data(for: request)
+            response.checkRateLimit()
+            do
             {
-                print("Could not download ticket info: \(error)")
-            }
-            else
-            {
-                guard let jsonData = data
-                else { fatalError("No error, but no data or no response either. HUH?") }
-                do
-                {
-                    let jiraIssues = try JSONDecoder().decode(JIRAIssues.self,
-                                                        from: jsonData)
-                      
-                    result(jiraIssues.issues)
+                let jiraIssues = try JSONDecoder().decode(JIRAIssues.self,
+                                                    from: jsonData)
+                return jiraIssues.issues
 
-                }
-                catch
-                {
-                    print("Could not decode JSONData: \(error)")
-                }
+            }
+            catch
+            {
+                print("Could not decode JSONData: \(error) \n\n\(String(data: jsonData, encoding: .utf8) ?? "❌")")
             }
         }
-        let _ = task.resume()
+        catch
+        {
+            print("Could not download data for \(request.url?.description ?? "no url in the request!"): \(error)")
+        }
+        return nil
     }
 }
 
-/// Issues
+/// Typed representation of Issues JSON that the jira api returns
 struct JIRAIssues: Decodable
 {
     let issues: [Issue]
