@@ -37,186 +37,142 @@ guard let boards = await BoardsFetcher(cookieString: cookieString,
                                        session: session).fetch()
 else
 {
-    print("Could not download boards from jira. Exiting now.")
+    print("Could not download boards from jira. Exiting now. Bye bye, take care.")
     exit(1)
 }
 
-for aUserprojectKey in userprojectKeys
-{
-    /// MARK: - Obtain scrum board(s) for the project
-    print("Obtaining scrum board(s) for \(aUserprojectKey)...")
-    let matchingBoards = boards.filter{
-        ($0.location?.projectKey != nil) &&
-        ($0.location!.projectKey == aUserprojectKey) &&
-        ($0.type == "scrum")
-    }
-    var boardID: Int? = nil
-    
-    if matchingBoards.count > 1
-    {
-        var boardsString = ""
-        
-        for index in 0 ..< matchingBoards.count
-        {
-            let aBoard = matchingBoards[index]
-            boardsString.append("\n#\(index):\n\(aBoard)\n")
-        }
-        print("Multiple projects with the project-key '\(aUserprojectKey)' found:\n\(boardsString)")
-        print("Please enter the index of which one to use")
-        if let index = readLine()
-        {
-            guard let indexAsInt = Int(index)
-            else {
-                print("You gave the index '\(index)', but I could not make this into an integer. Exiting with exit code 1")
-                exit(1)
-            }
-            if indexAsInt >= matchingBoards.count
-            {
-                print("You gave the index '\(indexAsInt)', but maximum is \(matchingBoards.count - 1). Exiting with exitcode 1")
-                exit(1)
-            }
-            print("You gave index \(indexAsInt), so continuing with:\n\(matchingBoards[indexAsInt])")
-            // we have a valid index
-            let aBoard = matchingBoards[indexAsInt]
-            
-            boardID = aBoard.id
+/// first pass filter: remove all boards that are not in one of the projects
+/// listed in `userprojectKeys`
+let relevantProjectBoards = boards.filter{
+    ($0.type == "scrum") &&
+    ($0.location?.projectKey != nil) && // this line allows for the force-unwrap on the next line
+    (userprojectKeys.contains($0.location!.projectKey))
+}
 
-        }
-        else
-        {
-            print("No input, moving on")
-        }
-    }
-    else if matchingBoards.count == 1
-    {
-        guard let aBoard = matchingBoards.first
-        else { fatalError("Check for at least one board was done just before. Was the code changed recently?") }
-        boardID = aBoard.id
-    }
+for aBoard in relevantProjectBoards
+{
+    // can't build the various network calls withut a project key,
+    // so if it nos there, continue on. Unlikely to actually happen,
+    // as the boards were filterd on having this value earlier.
+    guard let aUserprojectKey = aBoard.location?.projectKey
+    else { continue }
     
-    if let boardID = boardID
+    let boardID = aBoard.id
+    let sprints = await SprintsFetcher(projectIdentifier: boardID,
+                                       cookieString: cookieString,
+                                       session: session).fetch()
+    
+    /// MARK: - Filter Relevant Sprints
+    print("Filtering Relevant Sprints for \(aUserprojectKey)...")
+    var calendar = Calendar(identifier: .iso8601)
+    calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? TimeZone.current
+    calendar.locale = Locale(identifier: "en_US_POSIX")
+    
+    var dateComponents = DateComponents()
+    dateComponents.year = sprintsFromYear
+    dateComponents.month = sprintsFromMonth
+    
+    guard let fromDate = calendar.date(from: dateComponents)
+    else { fatalError("Could not create date from dateComponents") }
+    
+    let relevantSprints: [Sprint]
+    if activeSprintOnly
     {
-        let sprints = await SprintsFetcher(projectIdentifier: boardID,
-                                           cookieString: cookieString,
-                                           session: session).fetch()
-        
-        /// MARK: - Filter Relevant Sprints
-        print("Filtering Relevant Sprints for \(aUserprojectKey)...")
-        var calendar = Calendar(identifier: .iso8601)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? TimeZone.current
-        calendar.locale = Locale(identifier: "en_US_POSIX")
-        
-        var dateComponents = DateComponents()
-        dateComponents.year = sprintsFromYear
-        dateComponents.month = sprintsFromMonth
-        
-        guard let fromDate = calendar.date(from: dateComponents)
-        else { fatalError("Could not create date from dateComponents") }
-        
-        let relevantSprints: [Sprint]
-        if activeSprintOnly
-        {
-            relevantSprints = sprints.filter { $0.status == .active }
-        }
-        else
-        {
-            relevantSprints = sprints
-                .filter { $0.startDate != nil }
-                .filter { $0.startDate! > fromDate }
-        }
-        
-        /// e.g. when in planning and the active sprint has been closed
-        /// and the next one has not been started yet
-        if relevantSprints.count == 0
-        {
-            print("No relevant sprints found, exiting with code 1")
-            exit(1)
-        }
-        
-        if relevantSprints.count == 0
-        {
-            /// this condition gets hit for instance when in planning and the
-            ///  active sprint has been closed and the next one has not been
-            ///  started yet
-            print("No relevant sprints found for \(aUserprojectKey), moving on")
-        }
-        else
-        {
-            /// MARK: - Filter Relevant Sprints
-            var sprintAccounts = [SprintAccount]()
-            for aSprint in relevantSprints
-            {
-                print("\tObtaining full Burndown for sprint \(aSprint.name ?? (aSprint.startDate?.description ?? aSprint.id.description))...")
-                
-                let sprintIssueKeys = await BurndownFetcher(sprint: aSprint,
-                                                            projectID: boardID,
-                                                            cookieString: cookieString,
-                                                            session: session).fetch()
-                let insertedIssues: [Issue]
-                if nil != sprintIssueKeys &&
-                    !sprintIssueKeys!.insertions.isEmpty
-                {
-                    insertedIssues = await IssuesDetailsFetcher(issueKeys: sprintIssueKeys!.insertions,
-                                                                cookieString: cookieString,
-                                                                session: session).fetch() ?? []
-                }
-                else
-                {
-                    insertedIssues = []
-                }
-                
-                let committedIssues: [Issue]
-                if nil != sprintIssueKeys &&
-                    !sprintIssueKeys!.commitment.isEmpty
-                {
-                    committedIssues = await IssuesDetailsFetcher(issueKeys: sprintIssueKeys!.commitment,
-                                                                 cookieString: cookieString,
-                                                                 session: session).fetch() ?? []
-                }
-                else
-                {
-                    committedIssues = []
-                }
-                
-                
-                /// MARK: - Sprint Accounting
-                print("\t Sprint specific accounting...")
-                let accountant = SprintAccountant(sprintID: aSprint.id,
-                                                  startTime: aSprint.startDate,
-                                                  endTime: aSprint.endDate,
-                                                  name: aSprint.name,
-                                                  goal: aSprint.goal)
-                                
-                let account = accountant.sprintAccount(for: committedIssues,
-                                         insertedIssues: insertedIssues)
-                sprintAccounts.append(account)
-            }
-            
-            // MARK: - Exporting Sprint Accounts
-            print("\t exporting \(sprintAccounts.count) \(aUserprojectKey) sprints...")
-            /// NOTE, earlier, sprints were filtered
-            /// to fetch only those that have a startDate
-            /// so we can use `!` here
-            let sortedSprints = sprintAccounts.sorted{ $0.startTime! < $1.startTime! }
-            let csvString = SprintAccount.commaSeparatedValues(for: sortedSprints) as NSString
-            do
-            {
-                let path = ("~/Desktop/\(aUserprojectKey)-sprints.txt" as NSString)
-                    .expandingTildeInPath
-                try csvString.write(toFile: path,
-                                    atomically: true,
-                                    encoding: String.Encoding.utf8.rawValue)
-            }
-            catch
-            {
-                print("could not write file to disk: \(error)")
-            }
-        }
+        relevantSprints = sprints.filter { $0.status == .active }
     }
     else
     {
-        print("No board ID for this board (project '\(aUserprojectKey)'. That shoud be impossible at this point. Moving on to next project.")
-        continue
+        relevantSprints = sprints
+            .filter { $0.startDate != nil }
+            .filter { $0.startDate! > fromDate }
+    }
+    
+    /// e.g. when in planning and the active sprint has been closed
+    /// and the next one has not been started yet
+    if relevantSprints.count == 0
+    {
+        print("No relevant sprints found, exiting with code 1")
+        exit(1)
+    }
+    
+    if relevantSprints.count == 0
+    {
+        /// this condition gets hit for instance when in planning and the
+        ///  active sprint has been closed and the next one has not been
+        ///  started yet
+        print("No relevant sprints found for \(aUserprojectKey), moving on")
+    }
+    else
+    {
+        /// MARK: - Filter Relevant Sprints
+        var sprintAccounts = [SprintAccount]()
+        for aSprint in relevantSprints
+        {
+            print("\tObtaining full Burndown for sprint \(aSprint.name ?? (aSprint.startDate?.description ?? aSprint.id.description))...")
+            
+            let sprintIssueKeys = await BurndownFetcher(sprint: aSprint,
+                                                        projectID: boardID,
+                                                        cookieString: cookieString,
+                                                        session: session).fetch()
+            let insertedIssues: [Issue]
+            if nil != sprintIssueKeys &&
+                !sprintIssueKeys!.insertions.isEmpty
+            {
+                insertedIssues = await IssuesDetailsFetcher(issueKeys: sprintIssueKeys!.insertions,
+                                                            cookieString: cookieString,
+                                                            session: session).fetch() ?? []
+            }
+            else
+            {
+                insertedIssues = []
+            }
+            
+            let committedIssues: [Issue]
+            if nil != sprintIssueKeys &&
+                !sprintIssueKeys!.commitment.isEmpty
+            {
+                committedIssues = await IssuesDetailsFetcher(issueKeys: sprintIssueKeys!.commitment,
+                                                             cookieString: cookieString,
+                                                             session: session).fetch() ?? []
+            }
+            else
+            {
+                committedIssues = []
+            }
+            
+            
+            /// MARK: - Sprint Accounting
+            print("\t Sprint specific accounting...")
+            let accountant = SprintAccountant(sprintID: aSprint.id,
+                                              startTime: aSprint.startDate,
+                                              endTime: aSprint.endDate,
+                                              name: aSprint.name,
+                                              goal: aSprint.goal)
+            
+            let account = accountant.sprintAccount(for: committedIssues,
+                                                   insertedIssues: insertedIssues)
+            sprintAccounts.append(account)
+        }
+        
+        // MARK: - Exporting Sprint Accounts
+        print("\t exporting \(sprintAccounts.count) \(aUserprojectKey) sprints...")
+        /// NOTE, earlier, sprints were filtered
+        /// to fetch only those that have a startDate
+        /// so we can use `!` here
+        let sortedSprints = sprintAccounts.sorted{ $0.startTime! < $1.startTime! }
+        let csvString = SprintAccount.commaSeparatedValues(for: sortedSprints) as NSString
+        do
+        {
+            let path = ("~/Desktop/\(aUserprojectKey)-\(aBoard.name)-sprints.txt" as NSString)
+                .expandingTildeInPath
+            try csvString.write(toFile: path,
+                                atomically: true,
+                                encoding: String.Encoding.utf8.rawValue)
+        }
+        catch
+        {
+            print("could not write file to disk: \(error)")
+        }
     }
 }
 
