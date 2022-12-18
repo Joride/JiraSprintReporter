@@ -32,8 +32,6 @@ let userprojectKeys: [String] = [
 "PET",      // Platform Engineering
 ]
 
-
-
 /// Set to `true` to only report on the current active sprint of each board
 let activeSprintOnly = false
 
