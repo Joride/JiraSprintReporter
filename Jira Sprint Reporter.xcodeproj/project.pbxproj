@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A299CE6B294E12AB00430546 /* URLResponse+RateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE64294E120700430546 /* URLResponse+RateLimit.swift */; };
+		A299CE70294F57BE00430546 /* Global Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE6F294F57BE00430546 /* Global Functions.swift */; };
+		A299CE72294F580C00430546 /* cookiestringconstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE71294F580C00430546 /* cookiestringconstant.swift */; };
 		C49440D3278477FF000600CA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
 		C49440D527847873000600CA /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D427847873000600CA /* Issue.swift */; };
 		C49440D72784790B000600CA /* BoardsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D62784790B000600CA /* BoardsFetcher.swift */; };
@@ -35,6 +37,8 @@
 /* Begin PBXFileReference section */
 		39F0104E289C3B4A00AC9742 /* jsr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = jsr.entitlements; sourceTree = "<group>"; };
 		A299CE64294E120700430546 /* URLResponse+RateLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLResponse+RateLimit.swift"; sourceTree = "<group>"; };
+		A299CE6F294F57BE00430546 /* Global Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Functions.swift"; sourceTree = "<group>"; };
+		A299CE71294F580C00430546 /* cookiestringconstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cookiestringconstant.swift; sourceTree = "<group>"; };
 		C49440D2278477FF000600CA /* URLRequest+JIRA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+JIRA.swift"; sourceTree = "<group>"; };
 		C49440D427847873000600CA /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		C49440D62784790B000600CA /* BoardsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsFetcher.swift; sourceTree = "<group>"; };
@@ -68,6 +72,18 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
+		A299CE73294F595B00430546 /* Jira api fetchers */ = {
+			isa = PBXGroup;
+			children = (
+				C49440D62784790B000600CA /* BoardsFetcher.swift */,
+				C49440D82784794E000600CA /* SprintsFetcher.swift */,
+				C49440DA278479B0000600CA /* BurndownFetcher.swift */,
+				C49440DC278479CC000600CA /* IssuesDetailsFetcher.swift */,
+				A299CE6C294E12D700430546 /* Networking */,
+			);
+			path = "Jira api fetchers";
+			sourceTree = "<group>";
+		};
 		C49440DE278479DB000600CA /* SprintAccountant */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,14 +114,12 @@
 			isa = PBXGroup;
 			children = (
 				39F0104E289C3B4A00AC9742 /* jsr.entitlements */,
+				A299CE71294F580C00430546 /* cookiestringconstant.swift */,
 				C4C5E8EB2784496E00C59F65 /* main.swift */,
-				C49440D62784790B000600CA /* BoardsFetcher.swift */,
-				C49440D82784794E000600CA /* SprintsFetcher.swift */,
-				C49440DA278479B0000600CA /* BurndownFetcher.swift */,
-				C49440DC278479CC000600CA /* IssuesDetailsFetcher.swift */,
+				A299CE6F294F57BE00430546 /* Global Functions.swift */,
 				C49440D427847873000600CA /* Issue.swift */,
+				A299CE73294F595B00430546 /* Jira api fetchers */,
 				C49440DE278479DB000600CA /* SprintAccountant */,
-				A299CE6C294E12D700430546 /* Networking */,
 			);
 			path = jsr;
 			sourceTree = "<group>";
@@ -171,10 +185,12 @@
 				C49440DB278479B0000600CA /* BurndownFetcher.swift in Sources */,
 				C49440E0278479F6000600CA /* SprintAccountant.swift in Sources */,
 				C4C5E8EC2784496E00C59F65 /* main.swift in Sources */,
+				A299CE72294F580C00430546 /* cookiestringconstant.swift in Sources */,
 				C49440D92784794E000600CA /* SprintsFetcher.swift in Sources */,
 				C49440E227847A05000600CA /* Ticket.swift in Sources */,
 				C49440D3278477FF000600CA /* URLRequest+JIRA.swift in Sources */,
 				C49440D72784790B000600CA /* BoardsFetcher.swift in Sources */,
+				A299CE70294F57BE00430546 /* Global Functions.swift in Sources */,
 				A299CE6B294E12AB00430546 /* URLResponse+RateLimit.swift in Sources */,
 				C49440D527847873000600CA /* Issue.swift in Sources */,
 				C49440DD278479CC000600CA /* IssuesDetailsFetcher.swift in Sources */,
