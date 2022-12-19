@@ -7,9 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A22C304C294F9A9800EA743F /* cookiestringconstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE71294F580C00430546 /* cookiestringconstant.swift */; };
+		A22C304E294F9AD000EA743F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22C304D294F9AD000EA743F /* ViewController.swift */; };
+		A22C3050294F9D6600EA743F /* SprintIssuesFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22C304F294F9D6600EA743F /* SprintIssuesFetcher.swift */; };
+		A23E57752950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23E57742950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift */; };
 		A299CE6B294E12AB00430546 /* URLResponse+RateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE64294E120700430546 /* URLResponse+RateLimit.swift */; };
 		A299CE70294F57BE00430546 /* Global Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE6F294F57BE00430546 /* Global Functions.swift */; };
 		A299CE72294F580C00430546 /* cookiestringconstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE71294F580C00430546 /* cookiestringconstant.swift */; };
+		A299CE7F294F97ED00430546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A299CE7E294F97ED00430546 /* Assets.xcassets */; };
+		A299CE82294F97ED00430546 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A299CE80294F97ED00430546 /* Main.storyboard */; };
+		A299CE92294F987500430546 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE8A294F987500430546 /* AppDelegate.swift */; };
+		A299CE98294F989D00430546 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D427847873000600CA /* Issue.swift */; };
+		A2DA511A294F998B002D27AA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
+		A2DA511B294F998E002D27AA /* URLResponse+RateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE64294E120700430546 /* URLResponse+RateLimit.swift */; };
 		C49440D3278477FF000600CA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
 		C49440D527847873000600CA /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D427847873000600CA /* Issue.swift */; };
 		C49440D72784790B000600CA /* BoardsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D62784790B000600CA /* BoardsFetcher.swift */; };
@@ -36,9 +46,17 @@
 
 /* Begin PBXFileReference section */
 		39F0104E289C3B4A00AC9742 /* jsr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = jsr.entitlements; sourceTree = "<group>"; };
+		A22C304D294F9AD000EA743F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A22C304F294F9D6600EA743F /* SprintIssuesFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintIssuesFetcher.swift; sourceTree = "<group>"; };
+		A23E57742950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesChangeLogsFetcher.swift; sourceTree = "<group>"; };
 		A299CE64294E120700430546 /* URLResponse+RateLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLResponse+RateLimit.swift"; sourceTree = "<group>"; };
 		A299CE6F294F57BE00430546 /* Global Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Functions.swift"; sourceTree = "<group>"; };
 		A299CE71294F580C00430546 /* cookiestringconstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cookiestringconstant.swift; sourceTree = "<group>"; };
+		A299CE78294F97EC00430546 /* jsn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jsn.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A299CE7E294F97ED00430546 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A299CE81294F97ED00430546 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A299CE83294F97ED00430546 /* jsn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = jsn.entitlements; sourceTree = "<group>"; };
+		A299CE8A294F987500430546 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C49440D2278477FF000600CA /* URLRequest+JIRA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+JIRA.swift"; sourceTree = "<group>"; };
 		C49440D427847873000600CA /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		C49440D62784790B000600CA /* BoardsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsFetcher.swift; sourceTree = "<group>"; };
@@ -53,6 +71,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A299CE75294F97EC00430546 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4C5E8E52784496E00C59F65 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -79,9 +104,32 @@
 				C49440D82784794E000600CA /* SprintsFetcher.swift */,
 				C49440DA278479B0000600CA /* BurndownFetcher.swift */,
 				C49440DC278479CC000600CA /* IssuesDetailsFetcher.swift */,
-				A299CE6C294E12D700430546 /* Networking */,
 			);
 			path = "Jira api fetchers";
+			sourceTree = "<group>";
+		};
+		A299CE79294F97EC00430546 /* jsn */ = {
+			isa = PBXGroup;
+			children = (
+				A299CE8A294F987500430546 /* AppDelegate.swift */,
+				A22C304D294F9AD000EA743F /* ViewController.swift */,
+				A22C304F294F9D6600EA743F /* SprintIssuesFetcher.swift */,
+				A23E57742950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift */,
+				A299CE7E294F97ED00430546 /* Assets.xcassets */,
+				A299CE80294F97ED00430546 /* Main.storyboard */,
+				A299CE83294F97ED00430546 /* jsn.entitlements */,
+			);
+			path = jsn;
+			sourceTree = "<group>";
+		};
+		A299CE97294F989100430546 /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				A299CE6C294E12D700430546 /* Networking */,
+				C49440D427847873000600CA /* Issue.swift */,
+				A299CE71294F580C00430546 /* cookiestringconstant.swift */,
+			);
+			path = shared;
 			sourceTree = "<group>";
 		};
 		C49440DE278479DB000600CA /* SprintAccountant */ = {
@@ -97,7 +145,9 @@
 		C4C5E8DF2784496E00C59F65 = {
 			isa = PBXGroup;
 			children = (
+				A299CE97294F989100430546 /* shared */,
 				C4C5E8EA2784496E00C59F65 /* jsr */,
+				A299CE79294F97EC00430546 /* jsn */,
 				C4C5E8E92784496E00C59F65 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -106,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				C4C5E8E82784496E00C59F65 /* jsr */,
+				A299CE78294F97EC00430546 /* jsn.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,10 +165,8 @@
 			isa = PBXGroup;
 			children = (
 				39F0104E289C3B4A00AC9742 /* jsr.entitlements */,
-				A299CE71294F580C00430546 /* cookiestringconstant.swift */,
 				C4C5E8EB2784496E00C59F65 /* main.swift */,
 				A299CE6F294F57BE00430546 /* Global Functions.swift */,
-				C49440D427847873000600CA /* Issue.swift */,
 				A299CE73294F595B00430546 /* Jira api fetchers */,
 				C49440DE278479DB000600CA /* SprintAccountant */,
 			);
@@ -127,6 +176,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A299CE77294F97EC00430546 /* jsn */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A299CE86294F97ED00430546 /* Build configuration list for PBXNativeTarget "jsn" */;
+			buildPhases = (
+				A299CE74294F97EC00430546 /* Sources */,
+				A299CE75294F97EC00430546 /* Frameworks */,
+				A299CE76294F97EC00430546 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = jsn;
+			productName = jsn;
+			productReference = A299CE78294F97EC00430546 /* jsn.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C4C5E8E72784496E00C59F65 /* jsr */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C4C5E8EF2784496E00C59F65 /* Build configuration list for PBXNativeTarget "jsr" */;
@@ -151,9 +217,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1320;
+				LastSwiftUpdateCheck = 1400;
 				LastUpgradeCheck = 1300;
 				TargetAttributes = {
+					A299CE77294F97EC00430546 = {
+						CreatedOnToolsVersion = 14.0.1;
+						LastSwiftMigration = 1400;
+					};
 					C4C5E8E72784496E00C59F65 = {
 						CreatedOnToolsVersion = 13.0;
 					};
@@ -173,11 +243,39 @@
 			projectRoot = "";
 			targets = (
 				C4C5E8E72784496E00C59F65 /* jsr */,
+				A299CE77294F97EC00430546 /* jsn */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		A299CE76294F97EC00430546 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A299CE7F294F97ED00430546 /* Assets.xcassets in Resources */,
+				A299CE82294F97ED00430546 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		A299CE74294F97EC00430546 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A23E57752950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift in Sources */,
+				A22C304E294F9AD000EA743F /* ViewController.swift in Sources */,
+				A299CE92294F987500430546 /* AppDelegate.swift in Sources */,
+				A22C3050294F9D6600EA743F /* SprintIssuesFetcher.swift in Sources */,
+				A22C304C294F9A9800EA743F /* cookiestringconstant.swift in Sources */,
+				A2DA511A294F998B002D27AA /* URLRequest+JIRA.swift in Sources */,
+				A2DA511B294F998E002D27AA /* URLResponse+RateLimit.swift in Sources */,
+				A299CE98294F989D00430546 /* Issue.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4C5E8E42784496E00C59F65 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -200,7 +298,79 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		A299CE80294F97ED00430546 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A299CE81294F97ED00430546 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		A299CE84294F97ED00430546 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = jsn/jsn.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A299CE85294F97ED00430546 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = jsn/jsn.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		C4C5E8ED2784496E00C59F65 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -345,6 +515,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A299CE86294F97ED00430546 /* Build configuration list for PBXNativeTarget "jsn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A299CE84294F97ED00430546 /* Debug */,
+				A299CE85294F97ED00430546 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C4C5E8E32784496E00C59F65 /* Build configuration list for PBXProject "Jira Sprint Reporter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

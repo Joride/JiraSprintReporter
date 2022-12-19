@@ -85,13 +85,23 @@ struct Fields: Decodable
         enum State: String
         {
             case reopened = "Re-opened"
+            case onHold = "On Hold"
+            case needsImprovement = "Needs Improvement"
+            case readyForQA = "Ready for QA"
+            case readyForReview = "Ready for review"
+            case readyForCodeReview = "Ready for code review"
+            case readyToDeploy = "Ready to deploy"
+            case codeApproved = "Code approved"
+            case delivered = "Delivered"
             case open = "Open"
+            case todo = "To Do"
             case newTriage = "New / Triage"
             case blocked = "Blocked"
             case inDesignReview = "In Design Review"
             case inQA = "In QA"
             case inReview = "In Review"
             case closed = "Closed"
+            case done = "Done"
             case releasedUnderSplit = "Released under Split"
             case inProgress = "In Progress"
             case unexpected
@@ -99,8 +109,18 @@ struct Fields: Decodable
             {
                 switch rawValue
                 {
+                case Fields.Status.State.done.rawValue: self = .done
                 case Fields.Status.State.reopened.rawValue: self = .reopened
                 case Fields.Status.State.open.rawValue: self = .open
+                case Fields.Status.State.onHold.rawValue: self = .onHold
+                case Fields.Status.State.needsImprovement.rawValue: self = .needsImprovement
+                case Fields.Status.State.readyForQA.rawValue: self = .readyForQA
+                case Fields.Status.State.delivered.rawValue: self = .delivered
+                case Fields.Status.State.readyForReview.rawValue: self = .readyForReview
+                case Fields.Status.State.readyForCodeReview.rawValue: self = .readyForCodeReview
+                case Fields.Status.State.readyToDeploy.rawValue: self = .readyToDeploy
+                case Fields.Status.State.codeApproved.rawValue: self = .codeApproved
+                case Fields.Status.State.todo.rawValue: self = .todo
                 case Fields.Status.State.newTriage.rawValue: self = .newTriage
                 case Fields.Status.State.blocked.rawValue: self = .blocked
                 case Fields.Status.State.inDesignReview.rawValue: self = .inDesignReview
@@ -111,7 +131,7 @@ struct Fields: Decodable
                 case Fields.Status.State.inProgress.rawValue, "Ready For QA": self = .inProgress
                 default:
                     self = .unexpected
-                    fatalError("Unexpected TicketState encountered. This needs to be properly handled")
+                    fatalError("Unexpected TicketState encountered: \(rawValue). This needs to be properly handled")
                 }
             }
         }

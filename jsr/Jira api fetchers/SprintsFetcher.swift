@@ -97,7 +97,7 @@ class SprintsFetcher
         case dateFormatterFailed
     }
     
-    private func decodeDate(_ decoder: Decoder) throws -> Date
+    @Sendable private func decodeDate(_ decoder: Decoder) throws -> Date
     {
         let dateString = try decoder.singleValueContainer().decode(String.self)
         
