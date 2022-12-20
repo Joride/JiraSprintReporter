@@ -86,3 +86,109 @@ struct SprintTickets: Decodable
     let issues: [Issue]
 }
 
+struct SprintReview
+{
+    init(projectKey: String,
+        extendedIssues: [ExtendedIssue])
+    {
+        self.projectKey = projectKey
+        self.extendedIssues = extendedIssues
+        var doneTickets = [JIRAIssueChange]()
+        var doneBugsWithoutTimeSpent = [JIRAIssueChange]()
+        var doneTasksWithoutTimeSpent = [JIRAIssueChange]()
+        var changedAssigneeWithoutParticipants = [JIRAIssueChange]()
+        
+        for anExtendedIssue in extendedIssues
+        {
+            guard let state = anExtendedIssue.fields.status?.state
+            else { fatalError("Ticket without state encountered! This is unexpected and should be reviewed.") }
+            if state == .unexpected { fatalError("Ticket with unexpected state encountered! This is unexpected and should be reviewed.") }
+            
+            switch state
+            {
+            case .qaInProgress: break
+            case .review: break
+            case .onHold: break
+            case .readyForQA: break
+            case .reopened: break
+            case .needsImprovement: break
+            case .readyForReview: break
+            case .readyForCodeReview: break
+            case .readyToDeploy: break
+            case .open: break
+            case .codeApproved: break
+            case .todo: break
+            case .newTriage: break
+            case .blocked: break
+            case .inDesignReview: break
+            case .inQA: break
+            case .inReview: break
+            case .inProgress: break
+            case .unexpected: break
+            case .delivered: break
+            case .closed, .done:
+                guard let doneDate = anExtendedIssue.doneDate()
+                else { fatalError("No Done date for ticket. What is going on?") }
+                
+                let issueChange = JIRAIssueChange(changeDate: doneDate,
+                                                  issue: anExtendedIssue)
+                doneTickets.append(issueChange)
+                
+                if anExtendedIssue.fields.timespentHours == 0
+                {
+                    if anExtendedIssue.fields.issueType.ticketType == .bug
+                    {
+                        doneBugsWithoutTimeSpent.append(issueChange)
+                    }
+                    
+                    if anExtendedIssue.fields.issueType.ticketType == .task
+                    {
+                        doneTasksWithoutTimeSpent.append(issueChange)
+                    }
+                }
+            }
+            if let histories = anExtendedIssue.changelog?.histories
+            {
+                for aHistory in histories
+                {
+                    for aChange in aHistory.items
+                    {
+                        if aChange.field == "assignee"
+                        {
+                            let oldAssignee = aChange.fromString ?? ""
+                            if !oldAssignee.isEmpty
+                            {
+                                if let participants = anExtendedIssue.fields.participants
+                                {
+                                    if !participants.contains(where: { $0.displayName == oldAssignee })
+                                    {
+                                        let issueChange = JIRAIssueChange(changeDate: aHistory.created,
+                                                                          issue: anExtendedIssue)
+                                        changedAssigneeWithoutParticipants.append(issueChange)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        self.doneTickets = doneTickets
+        self.doneBugsWithoutTimeSpent = doneBugsWithoutTimeSpent
+        self.doneTasksWithoutTimeSpent = doneTasksWithoutTimeSpent
+        self.changedAssigneeWithoutParticipants = changedAssigneeWithoutParticipants
+    }
+    let projectKey: String
+    let extendedIssues: [ExtendedIssue]
+    let doneTickets: [JIRAIssueChange]
+    let doneBugsWithoutTimeSpent: [JIRAIssueChange]
+    let doneTasksWithoutTimeSpent: [JIRAIssueChange]
+    let changedAssigneeWithoutParticipants: [JIRAIssueChange]
+}
+
+
+struct JIRAIssueChange
+{
+    let changeDate: Date
+    let issue: ExtendedIssue
+}

@@ -84,6 +84,7 @@ struct Fields: Decodable
         }
         enum State: String
         {
+            case qaInProgress = "QA in progress"
             case reopened = "Re-opened"
             case onHold = "On Hold"
             case needsImprovement = "Needs Improvement"
@@ -100,15 +101,17 @@ struct Fields: Decodable
             case inDesignReview = "In Design Review"
             case inQA = "In QA"
             case inReview = "In Review"
+            case review = "Review"
             case closed = "Closed"
             case done = "Done"
-            case releasedUnderSplit = "Released under Split"
             case inProgress = "In Progress"
             case unexpected
             init(rawValue: String)
             {
                 switch rawValue
                 {
+                case Fields.Status.State.qaInProgress.rawValue: self = .qaInProgress
+                case Fields.Status.State.review.rawValue: self = .review
                 case Fields.Status.State.done.rawValue: self = .done
                 case Fields.Status.State.reopened.rawValue: self = .reopened
                 case Fields.Status.State.open.rawValue: self = .open
@@ -127,7 +130,6 @@ struct Fields: Decodable
                 case Fields.Status.State.inQA.rawValue: self = .inQA
                 case Fields.Status.State.inReview.rawValue: self = .inReview
                 case Fields.Status.State.closed.rawValue, "Released under Split": self = .closed
-                case Fields.Status.State.releasedUnderSplit.rawValue: self = .releasedUnderSplit
                 case Fields.Status.State.inProgress.rawValue, "Ready For QA": self = .inProgress
                 default:
                     self = .unexpected

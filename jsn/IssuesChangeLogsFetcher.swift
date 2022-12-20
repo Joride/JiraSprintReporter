@@ -174,11 +174,6 @@ extension ExtendedIssue
                         {
                             closedDate = aHistory.created
                         }
-                        
-                        if aChange.toString == Fields.Status.State.releasedUnderSplit.rawValue
-                        {
-                            releasedUnderSplitDate = aHistory.created
-                        }
                     }
                 }
             }

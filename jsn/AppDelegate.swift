@@ -88,9 +88,10 @@ class AppDelegate: NSObject
         }
     }
     
-    @objc private func checkSprints(sender: AnyClass?)
-    {
-        updateMenuItemTitleAndState(forFetchingState: true)
+//    @objc private func checkSprints(sender: AnyClass?)
+//    {
+//        updateMenuItemTitleAndState(forFetchingState: true)
+        
 //        sprintsReviewer?.fetchSprintReviewResults(for: ProjectKeys)
 //        {
 //            let rapportsByKey = $0
@@ -108,7 +109,7 @@ class AppDelegate: NSObject
 //                self.showWindow(sender: self)
 //            }
 //        }
-    }
+//    }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate
@@ -143,22 +144,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate
         completionHandler()
     }
 }
-
-struct SprintReview
-{
-    let doneTickets: [JIRAIssueChange]
-    let doneBugsWithoutTimeSpent: [JIRAIssueChange]
-    let doneTasksWithoutTimeSpent: [JIRAIssueChange]
-    let changedAssigneeWithoutParticipants: [JIRAIssueChange]
-}
-
-
-struct JIRAIssueChange
-{
-    let changeDate: Date
-    let issue: ExtendedIssue
-}
-
 extension AppDelegate: NSApplicationDelegate
 {
     func applicationWillFinishLaunching(_ notification: Notification)
@@ -167,130 +152,90 @@ extension AppDelegate: NSApplicationDelegate
         // bar, but it may be activated programmatically or by clicking on one
         // of its windows.
         NSApp.setActivationPolicy(.accessory)
-        /**
-         "PAY",      // Payments & Risk
-         "MR",       // Retention
-         "SHOP",     // Checkout
-         "MOBAPP",   // Mobile Apps
-         "DIS",      // Discovery
-         "OD",       // Orders & Delivery
-         "SIM",      // Supply Integation & Management
-         "PET",      // Platform Engineering
-
-         */
-        let projectKey = "PET"
+        
+        obtainSprintReviews()
+    }
+    
+    @objc private func obtainSprintReviews(sender: AnyObject? = nil)
+    {
+        updateMenuItemTitleAndState(forFetchingState: true)
         Task
         {
-            if let issues = await SprintIssuesFetcher(projectKey: projectKey,
-                                                   cookieString: cookieString).fetch()
-            {
-                let issueKeys = issues.map{ $0.key }
-                do
+            let sprintReviews = try await withThrowingTaskGroup(of: SprintReview?.self) { group in
+                
+                for aUserprojectKey in userprojectKeys
                 {
-                    let extendedIssues = try await IssuesChangelogsFetcher(issueKeys: issueKeys,
-                                                                           cookieString: cookieString).fetch()
-                    ////
-                    var doneTickets = [JIRAIssueChange]()
-                    var doneBugsWithoutTimeSpent = [JIRAIssueChange]()
-                    var doneTasksWithoutTimeSpent = [JIRAIssueChange]()
-                    var changedAssigneeWithoutParticipants = [JIRAIssueChange]()
-                    
-                    for anExtendedIssue in extendedIssues
-                    {
-                        guard let state = anExtendedIssue.fields.status?.state
-                        else { fatalError("Ticket without state encountered! This is unexpected and should be reviewed.") }
-                        if state == .unexpected { fatalError("Ticket with unexpected state encountered! This is unexpected and should be reviewed.") }
-                        
-                        print(state)
-                        
-                        
-                        switch state
-                        {
-                        case .onHold: break
-                        case .readyForQA: break
-                        case .reopened: break
-                        case .needsImprovement: break
-                        case .readyForReview: break
-                        case .readyForCodeReview: break
-                        case .readyToDeploy: break
-                        case .open: break
-                        case .codeApproved: break
-                        case .todo: break
-                        case .newTriage: break
-                        case .blocked: break
-                        case .inDesignReview: break
-                        case .inQA: break
-                        case .inReview: break
-                        case .inProgress: break
-                        case .unexpected: break
-                        case .delivered: break
-                        case .closed, .releasedUnderSplit, .done:
-                            guard let doneDate = anExtendedIssue.doneDate()
-                            else { fatalError("No Done date for ticket. What is going on?") }
-                            
-                            let issueChange = JIRAIssueChange(changeDate: doneDate,
-                                                              issue: anExtendedIssue)
-                            doneTickets.append(issueChange)
-                            
-                            if anExtendedIssue.fields.timespentHours == 0
-                            {
-                                if anExtendedIssue.fields.issueType.ticketType == .bug
-                                {
-                                    doneBugsWithoutTimeSpent.append(issueChange)
-                                }
-                                
-                                if anExtendedIssue.fields.issueType.ticketType == .task
-                                {
-                                    doneTasksWithoutTimeSpent.append(issueChange)
-                                }
-                            }
-                        }
-                        if let histories = anExtendedIssue.changelog?.histories
-                        {
-                            for aHistory in histories
-                            {
-                                for aChange in aHistory.items
-                                {
-                                    if aChange.field == "assignee"
-                                    {
-                                        let oldAssignee = aChange.fromString ?? ""
-                                        if !oldAssignee.isEmpty
-                                        {
-                                            if let participants = anExtendedIssue.fields.participants
-                                            {
-                                                if !participants.contains(where: { $0.displayName == oldAssignee })
-                                                {
-                                                    let issueChange = JIRAIssueChange(changeDate: aHistory.created,
-                                                                                      issue: anExtendedIssue)
-                                                    changedAssigneeWithoutParticipants.append(issueChange)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    let sprintReview = SprintReview(
-                        doneTickets: doneTickets,
-                        doneBugsWithoutTimeSpent:doneBugsWithoutTimeSpent,
-                        doneTasksWithoutTimeSpent:doneTasksWithoutTimeSpent,
-                        changedAssigneeWithoutParticipants: changedAssigneeWithoutParticipants)
-                    
-                    print(sprintReview)
-                    ////
+                    group.addTask { try await self.obtainSprintReview(forProject: aUserprojectKey) }
                 }
-                catch
+                
+                var result = [SprintReview?]()
+                for try await sprintReview in group
                 {
-                    print("Could not obtain changelogs for issue: \(error)")
+                    result.append(sprintReview)
                 }
+                
+                return result.compactMap{$0}
             }
-            else
+            
+            DispatchQueue.main.async
             {
-                print("Could not fetch issues for \(projectKey)")
+                self.updateMenuItemTitleAndState(forFetchingState: false)
+            }
+            
+            print("Obtained Sprint Reviews for:")
+            for aReview in sprintReviews
+            {
+                if aReview.extendedIssues.count == 0
+                {
+                    print("\t\(aReview.projectKey) -> no issues in sprint")
+                    continue
+                }
+                
+                if aReview.doneTickets.count == 0
+                {
+                    print("\t\(aReview.projectKey) -> has no tickets done yet")
+                }
+                else if aReview.doneBugsWithoutTimeSpent.count > 0
+                {
+                    print("\t\(aReview.projectKey) -> has bugs without logged time")
+                }
+                else if aReview.doneTasksWithoutTimeSpent.count > 0
+                {
+                    print("\t\(aReview.projectKey) -> has tasks without logged time")
+                }
+                else
+                {
+                    print("\t\(aReview.projectKey) - \(aReview.extendedIssues.count) issues in sprint")
+                }
             }
         }
+    }
+        
+    func obtainSprintReview(forProject projectKey: String) async throws -> SprintReview?
+    {
+        let sprintIssuesFetcher = SprintIssuesFetcher(projectKey: projectKey,
+                                                      cookieString: cookieString)
+        if let issues = await sprintIssuesFetcher.fetch()
+        {
+            let issueKeys = issues.map{ $0.key }
+            do
+            {
+                let extendedIssues = try await IssuesChangelogsFetcher(issueKeys: issueKeys,
+                                                                       cookieString: cookieString).fetch()
+                let review = SprintReview(projectKey: projectKey,
+                                          extendedIssues: extendedIssues)
+                return review
+            }
+            catch
+            {
+                print("Could not obtain changelogs for issue: \(error)")
+            }
+        }
+        else
+        {
+            print("Could not fetch issues for \(projectKey)")
+        }
+        return nil
     }
     
     var defaultImage: NSImage
@@ -310,7 +255,6 @@ extension AppDelegate: NSApplicationDelegate
     
     private func updateMenuItemTitleAndState(forFetchingState isFetching: Bool)
     {
-        
         checkItem?.isEnabled = !isFetching
         if isFetching
         {
@@ -337,7 +281,7 @@ extension AppDelegate: NSApplicationDelegate
         statusBarMenu.autoenablesItems = false
         
         let checkItem = NSMenuItem(title: "",
-                                  action: #selector(AppDelegate.checkSprints(sender:)),
+                                  action: #selector(AppDelegate.obtainSprintReviews(sender:)),
                                   keyEquivalent: "c")
         statusBarMenu.addItem(checkItem)
         self.checkItem = checkItem
