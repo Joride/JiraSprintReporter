@@ -161,6 +161,7 @@ class SprintReviewer: NSObject
         
     func obtainSprintReview(forProject projectKey: String) async throws -> SprintReview?
     {
+        let generatedTime = Date.now
         let sprintIssuesFetcher = SprintIssuesFetcher(projectKey: projectKey,
                                                       cookieString: cookieString)
         if let issues = await sprintIssuesFetcher.fetch()
@@ -172,6 +173,7 @@ class SprintReviewer: NSObject
                                                                        cookieString: cookieString).fetch()
                 let review = await SprintReview(projectKey: projectKey,
                                                 extendedIssues: extendedIssues,
+                                                generatedTime: generatedTime,
                                                 sinceDate: Date.distantPast)
                 return review
             }

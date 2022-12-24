@@ -16,6 +16,14 @@ import Foundation
  */
 struct SprintReview
 {
+    let projectKey: String
+    let extendedIssues: [ExtendedIssue]
+    let generatedTime: Date
+    let doneTickets: [JIRAIssueChange]
+    let doneStories: [JIRAIssueChange]
+    let doneBugsWithoutTimeSpent: [JIRAIssueChange]
+    let doneTasksWithoutTimeSpent: [JIRAIssueChange]
+    let addedToActiveSprint: [JIRAIssueChange]
     
     /// Returns a new SprintReview, but containting only JIRAIssues that
     /// had a change after the give date.
@@ -23,10 +31,12 @@ struct SprintReview
     /// mentioned in this struct's description.
     init(projectKey: String,
          extendedIssues: [ExtendedIssue],
+         generatedTime: Date,
          sinceDate: Date) async
     {
         self.projectKey = projectKey
         self.extendedIssues = extendedIssues
+        self.generatedTime = generatedTime
         var doneTickets = [JIRAIssueChange]()
         var doneStories = [JIRAIssueChange]()
         var doneBugsWithoutTimeSpent = [JIRAIssueChange]()
@@ -146,14 +156,6 @@ struct SprintReview
         self.doneTasksWithoutTimeSpent = doneTasksWithoutTimeSpent
         self.addedToActiveSprint = addedToActiveSprint
     }
-    
-    let projectKey: String
-    let extendedIssues: [ExtendedIssue]
-    let doneTickets: [JIRAIssueChange]
-    let doneStories: [JIRAIssueChange]
-    let doneBugsWithoutTimeSpent: [JIRAIssueChange]
-    let doneTasksWithoutTimeSpent: [JIRAIssueChange]
-    let addedToActiveSprint: [JIRAIssueChange]
 }
 
 extension SprintReview
