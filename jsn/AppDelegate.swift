@@ -10,25 +10,27 @@ import Cocoa
 @main
 class AppDelegate: NSObject
 {
-    private lazy var sprintReviewer = {
-        SprintReviewer
-        {
-            self.updateMenuItemTitleAndState(forFetchingState: $0)
-        }
+    private var statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    private var checkItem: NSMenuItem? = nil
+    private lazy var sprintReviewer =
+    {
+        SprintReviewer { self.updateMenuItemTitleAndState(forFetchingState: $0) }
     }()
+    
     private lazy var settingsWindowController: NSWindowController =
     {
         let window = NSWindow()
         return NSWindowController(window: window)
     }()
 
-    var viewController: ViewController?
+    private var viewController: ViewController?
     {
         /// Yeah this line hurst my eyes too, please educate me on how
         /// to do this properly - Jorrit
         return mainWindow?.contentViewController as? ViewController
     }
-    var mainWindow: NSWindow?
+    
+    private var mainWindow: NSWindow?
     {
         /// Watch out, retinal damage might occur
         /// by looking at this implementation!
@@ -44,20 +46,33 @@ class AppDelegate: NSObject
         return nil
     }
     
-    private var statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-    private var checkItem: NSMenuItem? = nil
-}
-
-extension AppDelegate: NSApplicationDelegate
-{
-    func applicationWillFinishLaunching(_ notification: Notification)
+    @objc private func showSettingsWindow(sender: Any)
     {
-        // The application does not appear in the Dock and does not have a menu
-        // bar, but it may be activated programmatically or by clicking on one
-        // of its windows.
-        NSApp.setActivationPolicy(.accessory)
+        settingsWindowController.window?.level = .floating
+        settingsWindowController.window?.title = NSLocalizedString("Jira Sprint Reporter Settings",
+                                                                   comment: "")
+//        let settingsViewHostingController = SettingsViewHostingController(rootView: SettingsView())
+//        settingsWindowController.window?.contentViewController = settingsViewHostingController
+        
+//        guard let screenSize = NSScreen.main?.visibleFrame.size
+//        else { fatalError("No monitor connected? Not covering this case.") }
+//
+//        let contentSize = settingsViewHostingController.sizeThatFits(in: screenSize)
+//        settingsWindowController.window?.setContentSize(contentSize)
+//        settingsWindowController.window?.styleMask = [.closable,
+//                                                      .miniaturizable,
+//                                                      .resizable,
+//                                                      .titled]
+//        settingsWindowController.showWindow(self)
     }
     
+    
+    @objc private func showWindow(sender: Any)
+    {
+        mainWindow?.makeKey()
+        mainWindow?.windowController?.showWindow(self)
+        mainWindow?.level = .floating
+    }
     var defaultImage: NSImage
     {
         guard let defaultImage = NSImage(systemSymbolName: "circle",
@@ -88,6 +103,17 @@ extension AppDelegate: NSApplicationDelegate
 //            statusBarItem.button?.title = "◎"
             statusBarItem.button?.image = defaultImage
         }
+    }
+}
+
+extension AppDelegate: NSApplicationDelegate
+{
+    func applicationWillFinishLaunching(_ notification: Notification)
+    {
+        // The application does not appear in the Dock and does not have a menu
+        // bar, but it may be activated programmatically or by clicking on one
+        // of its windows.
+        NSApp.setActivationPolicy(.accessory)
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification)
@@ -133,25 +159,14 @@ extension AppDelegate: NSApplicationDelegate
         updateMenuItemTitleAndState(forFetchingState: false)
     }
     
-    @objc private func showSettingsWindow(sender: Any)
-    {
-        settingsWindowController.window?.level = .floating
-        settingsWindowController.window?.title = NSLocalizedString("Jira Sprint Reporter Settings",
-                                                                   comment: "")
-//        let settingsViewHostingController = SettingsViewHostingController(rootView: SettingsView())
-//        settingsWindowController.window?.contentViewController = settingsViewHostingController
-        
-//        guard let screenSize = NSScreen.main?.visibleFrame.size
-//        else { fatalError("No monitor connected? Not covering this case.") }
-//
-//        let contentSize = settingsViewHostingController.sizeThatFits(in: screenSize)
-//        settingsWindowController.window?.setContentSize(contentSize)
-//        settingsWindowController.window?.styleMask = [.closable,
-//                                                      .miniaturizable,
-//                                                      .resizable,
-//                                                      .titled]
-//        settingsWindowController.showWindow(self)
-    }
+    /// This application can exist without any windows, as it has a menuBarItem
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool
+    { false }
+}
+
+
+extension AppDelegate
+{
     @objc private func generateSprintReports(sender: Any)
     {
 //        for anIdentifier in userprojectKeys
@@ -159,14 +174,4 @@ extension AppDelegate: NSApplicationDelegate
 //            /// do here what `jsr` command line tool does
 //        }
     }
-    
-    @objc private func showWindow(sender: Any)
-    {
-        mainWindow?.makeKey()
-        mainWindow?.windowController?.showWindow(self)
-        mainWindow?.level = .floating
-    }
-    
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool
-    { false }
 }

@@ -29,7 +29,8 @@ class SprintReviewer: NSObject
     private let notificationCenter = UNUserNotificationCenter.current()
     private let session = URLSession(configuration: .ephemeral)
     private let PreviousFetchDateKey = "PreviousFetchDateKey"
-        
+    
+    
     private let fetchState: (Bool) -> ()
     
     private lazy var callbackRepeater = {
@@ -40,6 +41,8 @@ class SprintReviewer: NSObject
             self.obtainSprintReviews(sender: self)
         }
     }()
+    
+    
     
     /// The given callback is called right before the SprintReviewer starts
     /// fetching and processing to get the sprintReviews with `True` as argument,
