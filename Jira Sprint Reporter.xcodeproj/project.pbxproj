@@ -11,6 +11,8 @@
 		A22C304E294F9AD000EA743F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22C304D294F9AD000EA743F /* ViewController.swift */; };
 		A22C3050294F9D6600EA743F /* SprintIssuesFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22C304F294F9D6600EA743F /* SprintIssuesFetcher.swift */; };
 		A23E57752950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23E57742950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift */; };
+		A23E57772952497300BD08E9 /* SprintReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23E57762952497300BD08E9 /* SprintReview.swift */; };
+		A23E577A2953A12100BD08E9 /* SprintSummaryFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23E57792953A12100BD08E9 /* SprintSummaryFetcher.swift */; };
 		A299CE6B294E12AB00430546 /* URLResponse+RateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE64294E120700430546 /* URLResponse+RateLimit.swift */; };
 		A299CE70294F57BE00430546 /* Global Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE6F294F57BE00430546 /* Global Functions.swift */; };
 		A299CE72294F580C00430546 /* cookiestringconstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE71294F580C00430546 /* cookiestringconstant.swift */; };
@@ -18,6 +20,9 @@
 		A299CE82294F97ED00430546 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A299CE80294F97ED00430546 /* Main.storyboard */; };
 		A299CE92294F987500430546 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE8A294F987500430546 /* AppDelegate.swift */; };
 		A299CE98294F989D00430546 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D427847873000600CA /* Issue.swift */; };
+		A2B45BDA295738710088C465 /* CallbackRepeater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B45BD9295738710088C465 /* CallbackRepeater.swift */; };
+		A2B45BDC29573C2B0088C465 /* SprintReviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B45BDB29573C2B0088C465 /* SprintReviewer.swift */; };
+		A2B64C2E2954E9A9004F9ACB /* ActiveSprintFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B64C2D2954E9A9004F9ACB /* ActiveSprintFetcher.swift */; };
 		A2DA511A294F998B002D27AA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
 		A2DA511B294F998E002D27AA /* URLResponse+RateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A299CE64294E120700430546 /* URLResponse+RateLimit.swift */; };
 		C49440D3278477FF000600CA /* URLRequest+JIRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49440D2278477FF000600CA /* URLRequest+JIRA.swift */; };
@@ -49,6 +54,8 @@
 		A22C304D294F9AD000EA743F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A22C304F294F9D6600EA743F /* SprintIssuesFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintIssuesFetcher.swift; sourceTree = "<group>"; };
 		A23E57742950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesChangeLogsFetcher.swift; sourceTree = "<group>"; };
+		A23E57762952497300BD08E9 /* SprintReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintReview.swift; sourceTree = "<group>"; };
+		A23E57792953A12100BD08E9 /* SprintSummaryFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintSummaryFetcher.swift; sourceTree = "<group>"; };
 		A299CE64294E120700430546 /* URLResponse+RateLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLResponse+RateLimit.swift"; sourceTree = "<group>"; };
 		A299CE6F294F57BE00430546 /* Global Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Functions.swift"; sourceTree = "<group>"; };
 		A299CE71294F580C00430546 /* cookiestringconstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cookiestringconstant.swift; sourceTree = "<group>"; };
@@ -57,6 +64,9 @@
 		A299CE81294F97ED00430546 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A299CE83294F97ED00430546 /* jsn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = jsn.entitlements; sourceTree = "<group>"; };
 		A299CE8A294F987500430546 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A2B45BD9295738710088C465 /* CallbackRepeater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallbackRepeater.swift; sourceTree = "<group>"; };
+		A2B45BDB29573C2B0088C465 /* SprintReviewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SprintReviewer.swift; sourceTree = "<group>"; };
+		A2B64C2D2954E9A9004F9ACB /* ActiveSprintFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSprintFetcher.swift; sourceTree = "<group>"; };
 		C49440D2278477FF000600CA /* URLRequest+JIRA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+JIRA.swift"; sourceTree = "<group>"; };
 		C49440D427847873000600CA /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		C49440D62784790B000600CA /* BoardsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsFetcher.swift; sourceTree = "<group>"; };
@@ -112,8 +122,13 @@
 			isa = PBXGroup;
 			children = (
 				A299CE8A294F987500430546 /* AppDelegate.swift */,
+				A2B45BDB29573C2B0088C465 /* SprintReviewer.swift */,
+				A2B45BD9295738710088C465 /* CallbackRepeater.swift */,
 				A22C304D294F9AD000EA743F /* ViewController.swift */,
 				A22C304F294F9D6600EA743F /* SprintIssuesFetcher.swift */,
+				A23E57792953A12100BD08E9 /* SprintSummaryFetcher.swift */,
+				A23E57762952497300BD08E9 /* SprintReview.swift */,
+				A2B64C2D2954E9A9004F9ACB /* ActiveSprintFetcher.swift */,
 				A23E57742950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift */,
 				A299CE7E294F97ED00430546 /* Assets.xcassets */,
 				A299CE80294F97ED00430546 /* Main.storyboard */,
@@ -267,12 +282,17 @@
 			files = (
 				A23E57752950EDB700BD08E9 /* IssuesChangeLogsFetcher.swift in Sources */,
 				A22C304E294F9AD000EA743F /* ViewController.swift in Sources */,
+				A23E577A2953A12100BD08E9 /* SprintSummaryFetcher.swift in Sources */,
 				A299CE92294F987500430546 /* AppDelegate.swift in Sources */,
 				A22C3050294F9D6600EA743F /* SprintIssuesFetcher.swift in Sources */,
 				A22C304C294F9A9800EA743F /* cookiestringconstant.swift in Sources */,
 				A2DA511A294F998B002D27AA /* URLRequest+JIRA.swift in Sources */,
+				A2B45BDA295738710088C465 /* CallbackRepeater.swift in Sources */,
+				A23E57772952497300BD08E9 /* SprintReview.swift in Sources */,
 				A2DA511B294F998E002D27AA /* URLResponse+RateLimit.swift in Sources */,
 				A299CE98294F989D00430546 /* Issue.swift in Sources */,
+				A2B45BDC29573C2B0088C465 /* SprintReviewer.swift in Sources */,
+				A2B64C2E2954E9A9004F9ACB /* ActiveSprintFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +344,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sprint Notifier";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -333,6 +354,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.recharge.jsn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -355,6 +377,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sprint Notifier";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -364,6 +387,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.recharge.jsn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;

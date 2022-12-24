@@ -5,7 +5,7 @@
 //  Created by Jorrit van Asselt on 19/12/2022.
 //
 
-import Cocoa
+import Foundation
 
 class IssuesChangelogsFetcher: NSObject
 {
@@ -143,6 +143,9 @@ struct Changelog: Decodable
             let field: String
             let fromString: String?
             let toString: String?
+            
+            let from: String?
+            let to: String?
         }
     }
 }
@@ -150,8 +153,9 @@ struct Changelog: Decodable
 extension ExtendedIssue
 {
     /// is the issue is not Done /  completed, this function will return nil
-    func doneDate() -> Date?
+    func doneDate() -> (date: Date?, author: String?)?
     {
+        var author: String? = nil
         guard let state = fields.status?.state
         else { fatalError("Ticket without state encountered! This is unexpected and should be reviewed.") }
         
@@ -173,6 +177,7 @@ extension ExtendedIssue
                             aChange.toString == Fields.Status.State.done.rawValue
                         {
                             closedDate = aHistory.created
+                            author = aHistory.author?.displayName ?? aHistory.author?.emailAddress ?? "\"\""
                         }
                     }
                 }
@@ -181,11 +186,13 @@ extension ExtendedIssue
         
         if nil != closedDate && nil != releasedUnderSplitDate
         {
-            return closedDate! > releasedUnderSplitDate! ? closedDate! : releasedUnderSplitDate!
+            return closedDate! > releasedUnderSplitDate! ?
+            (closedDate!, author) :
+            (releasedUnderSplitDate!, author)
         }
-        if nil != closedDate { return closedDate }
-        if nil != releasedUnderSplitDate { return releasedUnderSplitDate }
+        if nil != closedDate { return (closedDate, author) }
+        if nil != releasedUnderSplitDate { return (releasedUnderSplitDate, author) }
         
-        return nil
+        return (nil)
     }
 }

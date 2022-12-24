@@ -9,7 +9,7 @@ import Cocoa
 import UserNotifications
 
 /// The identifiers for the Jira projects for Recharge's engineering teams
-let userprojectKeys: [String] = [
+private let userprojectKeys: [String] = [
 "PAY",      // Payments & Risk
 "MR",       // Retention
 "SHOP",     // Checkout
@@ -20,13 +20,12 @@ let userprojectKeys: [String] = [
 "PET",      // Platform Engineering
 ]
 
-
 private let FetchTimeInterval: TimeInterval = 15*60 // (15 minutes)
 
 @main
 class AppDelegate: NSObject
 {
-    
+    private let notificationCenter = UNUserNotificationCenter.current()
     private lazy var settingsWindowController: NSWindowController =
     {
         let window = NSWindow()
@@ -61,24 +60,28 @@ class AppDelegate: NSObject
     private var checkItem: NSMenuItem? = nil
     
     func sendNotification(title: String,
-                          body: String = "",
-                          subTitle: String = "")
+                          body: String,
+                          subTitle: String,
+                          threadId: String?)
     {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.subtitle = subTitle
+        content.sound = .default
+        content.interruptionLevel = .active
+        
+        if let threadIdentifier = threadId
+        {
+            content.threadIdentifier = threadIdentifier
+        }
         
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(
             identifier: uuidString,
             content: content,
-            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false))
+            trigger: nil)
         
-        
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.delegate = self
-        notificationCenter.requestAuthorization(options: [.alert, .sound]) { _, _ in }
         notificationCenter.add(request)
         {
             if let error = $0
@@ -119,13 +122,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
     {
-        /// This method is only called when the app is active. By    default,
+        /// This method is only called when the app is active. By default,
         /// notifications are not shown when the app is active.
         /// Implementing this method, and calling the completionHandler will
         /// cause the notifcation to be shown when the app is active. Don't
         /// forget to assign the `delegate` property of a
         /// `UNUserNotificationCenter` instance.
-        completionHandler([.banner, .sound])
+        completionHandler([.banner, .sound, .list])
     }
     
     // For handling tap and user actions
@@ -153,7 +156,7 @@ extension AppDelegate: NSApplicationDelegate
         // of its windows.
         NSApp.setActivationPolicy(.accessory)
         
-        obtainSprintReviews()
+//        obtainSprintReviews()
     }
     
     @objc private func obtainSprintReviews(sender: AnyObject? = nil)
@@ -173,16 +176,23 @@ extension AppDelegate: NSApplicationDelegate
                 {
                     result.append(sprintReview)
                 }
-                
                 return result.compactMap{$0}
             }
-            
             DispatchQueue.main.async
             {
+                for aReview in sprintReviews
+                {
+                    if let summary = aReview.notificationSummary
+                    {
+                        self.sendNotification(title: summary.title,
+                                              body: summary.body,
+                                              subTitle: summary.subtitle,
+                                              threadId: aReview.projectKey)
+                    }
+                }
                 self.updateMenuItemTitleAndState(forFetchingState: false)
             }
             
-            print("Obtained Sprint Reviews for:")
             for aReview in sprintReviews
             {
                 if aReview.extendedIssues.count == 0
@@ -222,8 +232,9 @@ extension AppDelegate: NSApplicationDelegate
             {
                 let extendedIssues = try await IssuesChangelogsFetcher(issueKeys: issueKeys,
                                                                        cookieString: cookieString).fetch()
-                let review = SprintReview(projectKey: projectKey,
-                                          extendedIssues: extendedIssues)
+                let review = await SprintReview(projectKey: projectKey,
+                                                extendedIssues: extendedIssues,
+                                                sinceDate: Date.distantPast)
                 return review
             }
             catch
@@ -272,6 +283,17 @@ extension AppDelegate: NSApplicationDelegate
     
     func applicationDidFinishLaunching(_ aNotification: Notification)
     {
+        
+        notificationCenter.delegate = self
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if let error = error
+            {
+                print("Error requesting permission for notifiations: \(error)")
+                // Handle the error here.
+            }
+            // Enable or disable features based on the authorization.
+        }
+        
         mainWindow?.close()
         mainWindow?.title = "Jira Sprint Notifier"
         
@@ -285,7 +307,6 @@ extension AppDelegate: NSApplicationDelegate
                                   keyEquivalent: "c")
         statusBarMenu.addItem(checkItem)
         self.checkItem = checkItem
-        
         
         let showWindowItem = NSMenuItem(title: NSLocalizedString("Show Sprint Updates", comment: ""),
                                   action: #selector(AppDelegate.showWindow(sender:)),

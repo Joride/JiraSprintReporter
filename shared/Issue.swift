@@ -56,12 +56,16 @@ struct Fields: Decodable
                 case Fields.IssueType.TicketType.task.rawValue: self = .task
                 case Fields.IssueType.TicketType.subtask.rawValue: self = .subtask
                 case Fields.IssueType.TicketType.epic.rawValue: self = .epic
+                case Fields.IssueType.TicketType.analysis.rawValue: self = .analysis
+                case Fields.IssueType.TicketType.employeeOffboarding.rawValue: self = .employeeOffboarding
+                case Fields.IssueType.TicketType.employeeOnboarding.rawValue: self = .employeeOnboarding
                 default:
                     self = .unexpected
-                    fatalError("Unexpected TicketType encountered. This needs to be properly handled")
+                    fatalError("Unexpected TicketType encountered: \"\(rawValue)\". This needs to be properly handled")
                     
                 }
             }
+            case analysis = "Analysis"
             case epic = "Epic"
             case bug = "Bug"
             case userStory = "Story"
@@ -69,6 +73,8 @@ struct Fields: Decodable
             case design = "Design"
             case task = "Task"
             case subtask = "Sub-task"
+            case employeeOffboarding = "Employee offboarding"
+            case employeeOnboarding = "Employee onboarding"
             case unexpected
         }
     }
