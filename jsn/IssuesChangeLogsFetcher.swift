@@ -95,7 +95,11 @@ class IssuesChangelogsFetcher: NSObject
         let request = URLRequest.jiraRequestWith(url: url, cookieString: cookieString)
         
         let (data, response) = try await session.data(for: request)
-        response.checkRateLimit()
+        if let untilDate = response.rateLimitedUntil()
+        {
+            throw JiraApiError.rateLimited(untilDate)
+        }
+        
         
         do
         {
@@ -164,7 +168,6 @@ extension ExtendedIssue
         /// if the ticket is closed, the close date is returned
         /// if the tickets is released under split we return that date
         var closedDate: Date? = nil
-        var releasedUnderSplitDate: Date? = nil
         if let histories = changelog?.histories
         {
             for aHistory in histories
@@ -184,15 +187,12 @@ extension ExtendedIssue
             }
         }
         
-        if nil != closedDate && nil != releasedUnderSplitDate
+        if nil != closedDate
         {
-            return closedDate! > releasedUnderSplitDate! ?
-            (closedDate!, author) :
-            (releasedUnderSplitDate!, author)
+            return (closedDate!, author)
         }
         if nil != closedDate { return (closedDate, author) }
-        if nil != releasedUnderSplitDate { return (releasedUnderSplitDate, author) }
         
-        return (nil)
+        return (nil, nil)
     }
 }

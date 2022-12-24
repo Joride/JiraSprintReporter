@@ -53,7 +53,10 @@ class SprintIssuesFetcher: NSObject
         do
         {
             let (data, response) = try await session.data(for: request)
-            response.checkRateLimit()
+            if let untilDate = response.rateLimitedUntil()
+            {
+                throw JiraApiError.rateLimited(untilDate)
+            }
             
             let decoder = JSONDecoder()
             let tickets = try decoder.decode(SprintTickets.self,

@@ -104,6 +104,7 @@ extension AppDelegate: NSApplicationDelegate
         let checkItem = NSMenuItem(title: "",
                                   action: #selector(SprintReviewer.obtainSprintReviews(sender:)),
                                   keyEquivalent: "c")
+        checkItem.target = sprintReviewer
         statusBarMenu.addItem(checkItem)
         self.checkItem = checkItem
         
