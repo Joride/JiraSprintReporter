@@ -29,11 +29,13 @@ struct Ticket
                 "Code approved",
                 "On Hold",
                 "Ready for QA",
+                "QA in progress",
                 "Ready for code review",
                 "Ready to deploy",
                 "Needs Improvement",
                 "Ready for review",
                 "Design review",
+                "PO Review",
                 "In Delivery",
                 "Review": self = .notDone
             case "Done",
