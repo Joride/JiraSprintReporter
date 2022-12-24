@@ -36,7 +36,10 @@ class BoardsFetcher
         do
         {
             let (data, response) = try await session.data(for: request)
-            response.checkRateLimit()
+            if let untilDate = response.rateLimitedUntil()
+            {
+                throw JiraApiError.rateLimited(untilDate)
+            }
             
             let decoder = JSONDecoder()
             let boardResults = try decoder.decode(BoardsResults.self,

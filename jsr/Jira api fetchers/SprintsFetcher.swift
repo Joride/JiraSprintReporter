@@ -62,7 +62,10 @@ class SprintsFetcher
         do
         {
             let (jsonData, response) = try await session.data(for: request)
-            response.checkRateLimit()
+            if let untilDate = response.rateLimitedUntil()
+            {
+                throw JiraApiError.rateLimited(untilDate)
+            }
             
             do
             {
