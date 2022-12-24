@@ -6,33 +6,22 @@
 //
 
 import Cocoa
-import UserNotifications
-
-/// The identifiers for the Jira projects for Recharge's engineering teams
-private let userprojectKeys: [String] = [
-"PAY",      // Payments & Risk
-"MR",       // Retention
-"SHOP",     // Checkout
-"MOBAPP",   // Mobile Apps
-"DIS",      // Discovery
-"OD",       // Orders & Delivery
-"SIM",      // Supply Integation & Management
-"PET",      // Platform Engineering
-]
-
-private let FetchTimeInterval: TimeInterval = 15*60 // (15 minutes)
 
 @main
 class AppDelegate: NSObject
 {
-    private let notificationCenter = UNUserNotificationCenter.current()
+    private lazy var sprintReviewer = {
+        SprintReviewer
+        {
+            self.updateMenuItemTitleAndState(forFetchingState: $0)
+        }
+    }()
     private lazy var settingsWindowController: NSWindowController =
     {
         let window = NSWindow()
         return NSWindowController(window: window)
     }()
-    
-    fileprivate let PreviousFetchDateKey = "PreviousFetchDateKey"
+
     var viewController: ViewController?
     {
         /// Yeah this line hurst my eyes too, please educate me on how
@@ -55,98 +44,10 @@ class AppDelegate: NSObject
         return nil
     }
     
-    private let session = URLSession(configuration: .ephemeral)
     private var statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     private var checkItem: NSMenuItem? = nil
-    
-    func sendNotification(title: String,
-                          body: String,
-                          subTitle: String,
-                          threadId: String?)
-    {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.subtitle = subTitle
-        content.sound = .default
-        content.interruptionLevel = .active
-        
-        if let threadIdentifier = threadId
-        {
-            content.threadIdentifier = threadIdentifier
-        }
-        
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(
-            identifier: uuidString,
-            content: content,
-            trigger: nil)
-        
-        notificationCenter.add(request)
-        {
-            if let error = $0
-            {
-                print("Could not show notification: \(error)")
-            }
-        }
-    }
-    
-//    @objc private func checkSprints(sender: AnyClass?)
-//    {
-//        updateMenuItemTitleAndState(forFetchingState: true)
-        
-//        sprintsReviewer?.fetchSprintReviewResults(for: ProjectKeys)
-//        {
-//            let rapportsByKey = $0
-//            DispatchQueue.main.async
-//            {
-//                var allDetails = ""
-//                for aKeyAndRapport in rapportsByKey
-//                {
-//                    allDetails += "\(aKeyAndRapport.key) sprint:\n\(aKeyAndRapport.value.details)\n"
-////                    self.sendNotification(title: "\(aKeyAndRapport.key) has changes",
-////                                          body: aKeyAndRapport.value.summary)
-//                }
-//                self.viewController?.textView.string = allDetails
-//                self.updateMenuItemTitleAndState(for: false)
-//                self.showWindow(sender: self)
-//            }
-//        }
-//    }
 }
 
-extension AppDelegate: UNUserNotificationCenterDelegate
-{
-    //for displaying notification when app is in foreground
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
-    {
-        /// This method is only called when the app is active. By default,
-        /// notifications are not shown when the app is active.
-        /// Implementing this method, and calling the completionHandler will
-        /// cause the notifcation to be shown when the app is active. Don't
-        /// forget to assign the `delegate` property of a
-        /// `UNUserNotificationCenter` instance.
-        completionHandler([.banner, .sound, .list])
-    }
-    
-    // For handling tap and user actions
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void)
-    {
-        switch response.actionIdentifier
-        {
-        case UNNotificationDismissActionIdentifier: break
-        case UNNotificationDefaultActionIdentifier:
-            NSApplication.shared.windows[1].makeKeyAndOrderFront(self)
-        default:
-            break
-        }
-        completionHandler()
-    }
-}
 extension AppDelegate: NSApplicationDelegate
 {
     func applicationWillFinishLaunching(_ notification: Notification)
@@ -155,98 +56,6 @@ extension AppDelegate: NSApplicationDelegate
         // bar, but it may be activated programmatically or by clicking on one
         // of its windows.
         NSApp.setActivationPolicy(.accessory)
-        
-//        obtainSprintReviews()
-    }
-    
-    @objc private func obtainSprintReviews(sender: AnyObject? = nil)
-    {
-        updateMenuItemTitleAndState(forFetchingState: true)
-        Task
-        {
-            let sprintReviews = try await withThrowingTaskGroup(of: SprintReview?.self) { group in
-                
-                for aUserprojectKey in userprojectKeys
-                {
-                    group.addTask { try await self.obtainSprintReview(forProject: aUserprojectKey) }
-                }
-                
-                var result = [SprintReview?]()
-                for try await sprintReview in group
-                {
-                    result.append(sprintReview)
-                }
-                return result.compactMap{$0}
-            }
-            DispatchQueue.main.async
-            {
-                for aReview in sprintReviews
-                {
-                    if let summary = aReview.notificationSummary
-                    {
-                        self.sendNotification(title: summary.title,
-                                              body: summary.body,
-                                              subTitle: summary.subtitle,
-                                              threadId: aReview.projectKey)
-                    }
-                }
-                self.updateMenuItemTitleAndState(forFetchingState: false)
-            }
-            
-            for aReview in sprintReviews
-            {
-                if aReview.extendedIssues.count == 0
-                {
-                    print("\t\(aReview.projectKey) -> no issues in sprint")
-                    continue
-                }
-                
-                if aReview.doneTickets.count == 0
-                {
-                    print("\t\(aReview.projectKey) -> has no tickets done yet")
-                }
-                else if aReview.doneBugsWithoutTimeSpent.count > 0
-                {
-                    print("\t\(aReview.projectKey) -> has bugs without logged time")
-                }
-                else if aReview.doneTasksWithoutTimeSpent.count > 0
-                {
-                    print("\t\(aReview.projectKey) -> has tasks without logged time")
-                }
-                else
-                {
-                    print("\t\(aReview.projectKey) - \(aReview.extendedIssues.count) issues in sprint")
-                }
-            }
-        }
-    }
-        
-    func obtainSprintReview(forProject projectKey: String) async throws -> SprintReview?
-    {
-        let sprintIssuesFetcher = SprintIssuesFetcher(projectKey: projectKey,
-                                                      cookieString: cookieString)
-        if let issues = await sprintIssuesFetcher.fetch()
-        {
-            let issueKeys = issues.map{ $0.key }
-            do
-            {
-                let extendedIssues = try await IssuesChangelogsFetcher(issueKeys: issueKeys,
-                                                                       cookieString: cookieString).fetch()
-                let review = await SprintReview(projectKey: projectKey,
-                                                extendedIssues: extendedIssues,
-                                                sinceDate: Date.distantPast)
-                return review
-            }
-            catch
-            {
-                print("Could not obtain changelogs for issue: \(error)")
-            }
-        }
-        else
-        {
-            print("Could not fetch issues for \(projectKey)")
-        }
-        return nil
     }
     
     var defaultImage: NSImage
@@ -283,17 +92,7 @@ extension AppDelegate: NSApplicationDelegate
     
     func applicationDidFinishLaunching(_ aNotification: Notification)
     {
-        
-        notificationCenter.delegate = self
-        notificationCenter.requestAuthorization(options: [.alert, .sound]) { granted, error in
-            if let error = error
-            {
-                print("Error requesting permission for notifiations: \(error)")
-                // Handle the error here.
-            }
-            // Enable or disable features based on the authorization.
-        }
-        
+        let _ = sprintReviewer
         mainWindow?.close()
         mainWindow?.title = "Jira Sprint Notifier"
         
@@ -303,7 +102,7 @@ extension AppDelegate: NSApplicationDelegate
         statusBarMenu.autoenablesItems = false
         
         let checkItem = NSMenuItem(title: "",
-                                  action: #selector(AppDelegate.obtainSprintReviews(sender:)),
+                                  action: #selector(SprintReviewer.obtainSprintReviews(sender:)),
                                   keyEquivalent: "c")
         statusBarMenu.addItem(checkItem)
         self.checkItem = checkItem
@@ -331,11 +130,6 @@ extension AppDelegate: NSApplicationDelegate
             keyEquivalent: "q")
         
         updateMenuItemTitleAndState(forFetchingState: false)
-        
-//        self.fetchScheduler.start
-//        {
-//            self.checkSprints(sender: nil)
-//        }
     }
     
     @objc private func showSettingsWindow(sender: Any)
@@ -359,10 +153,10 @@ extension AppDelegate: NSApplicationDelegate
     }
     @objc private func generateSprintReports(sender: Any)
     {
-        for anIdentifier in userprojectKeys
-        {
-            /// do here what `jsr` command line tool does
-        }
+//        for anIdentifier in userprojectKeys
+//        {
+//            /// do here what `jsr` command line tool does
+//        }
     }
     
     @objc private func showWindow(sender: Any)

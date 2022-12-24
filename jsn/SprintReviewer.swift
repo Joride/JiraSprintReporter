@@ -29,20 +29,29 @@ class SprintReviewer: NSObject
     private let notificationCenter = UNUserNotificationCenter.current()
     private let session = URLSession(configuration: .ephemeral)
     private let PreviousFetchDateKey = "PreviousFetchDateKey"
+    private let fetchState: (Bool) -> ()
     
     private lazy var callbackRepeater = {
         CallbackRepeater(interval: FetchTimeInterval,
-                         activeTimeStart: DateComponents(),
-                         activeTimeEnd: DateComponents())
+                         activeTimeStart: DateComponents(hour: 8, minute: 30),
+                         activeTimeEnd: DateComponents(hour: 22, minute: 00))
         {
-            
+            self.obtainSprintReviews(sender: self)
         }
     }()
     
     
-    override init()
+    /// The given callback is called right before the SprintReviewer starts
+    /// fetching and processing to get the sprintReviews with `True` as argument,
+    /// and again once done with `false`.
+    init(fetchState: @escaping (Bool) -> ())
     {
+        self.fetchState = fetchState
         super.init()
+        let _ = callbackRepeater // lazy load the var. Annoying quirk of swift,
+        // where it is not possivle to initializa with a callback that calls
+        // a method on self. But if it is lazy, there has to be a trigger to
+        // initialize it somewhere. That is here.
         notificationCenter.delegate = self
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { granted, error in
             if let error = error
@@ -85,8 +94,9 @@ class SprintReviewer: NSObject
             }
         }
     }
-    @objc private func obtainSprintReviews(sender: AnyObject? = nil)
+    @objc func obtainSprintReviews(sender: AnyObject? = nil)
     {
+        fetchState(true)
         Task
         {
             let sprintReviews = try await withThrowingTaskGroup(of: SprintReview?.self) { group in
@@ -115,6 +125,7 @@ class SprintReviewer: NSObject
                                               threadId: aReview.projectKey)
                     }
                 }
+                self.fetchState(false)
             }
             
             for aReview in sprintReviews
