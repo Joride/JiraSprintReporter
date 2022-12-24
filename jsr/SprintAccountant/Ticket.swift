@@ -41,7 +41,7 @@ struct Ticket
             case "Done",
                 "Won't fix",
                 "Closed",
-                 "Delivered": self = .done
+                "Delivered": self = .done
             default:
                 self = .unexpected
                 fatalError("\"\(rawValue)\" Unexpected Ticket Type encountered. This needs to be properly handled:")
